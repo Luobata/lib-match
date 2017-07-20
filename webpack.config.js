@@ -14,7 +14,11 @@ module.exports = {
         path: __dirname + "/",
         filename: "bundle.js"
     },
-
+    resolve: {
+        alias: {
+           MATCH: path.resolve(__dirname, 'src/match')
+        }
+    },
     module: {
         loaders: [
         {
@@ -46,7 +50,7 @@ module.exports = {
 
     devServer: {
         contentBase: "./",
-        port: 8888,
+        port: 9999,
         colors: true,
         historyApiFallback: true,
         inline: true
