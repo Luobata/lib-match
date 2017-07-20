@@ -5,7 +5,7 @@ var root = path.resolve(__dirname, './');
 module.exports = {
     devtool: 'source-map',
 
-    entry:  __dirname + "/src/index.js",
+    entry:  __dirname + "/test.js",
     output: {
         stats: {
             colors: true
@@ -16,7 +16,8 @@ module.exports = {
     },
     resolve: {
         alias: {
-           MATCH: path.resolve(__dirname, 'src/match')
+           MATCH: path.resolve(__dirname, 'src/match'),
+           LIB: path.resolve(__dirname, 'src/lib')
         }
     },
     module: {
