@@ -6,6 +6,9 @@ import {
 } from 'LIB/util';
 
 
+/**
+ * 对象映射
+ */
 let matchObject = function (
     data: any,
     obj: object
@@ -20,10 +23,24 @@ let matchObject = function (
     return result;
 };
 
+/**
+ * 数组映射
+ */
 let matchArray = function (
     data: any,
     arr: Array
 ) {
+    let exp;
+    let result = {};
+
+    if (arr.length === 1) {
+        // 直接映射 data
+        for (let i = 0; i < data.length; i++) {
+            result[i] = matchObject(data[i], arr[0]);
+        }
+    }
+
+    return result;
 };
 
 export default function init (combineData, keyData) {
@@ -32,6 +49,10 @@ export default function init (combineData, keyData) {
 
     if (isObj(keyData)) {
         result = matchObject(combineData, keyData);
+    }
+
+    if (isArray(keyData)) {
+        result = matchArray(combineData, keyData);
     }
 
     return result;

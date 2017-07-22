@@ -50,3 +50,20 @@ var data = match(params, {
 });
 
 console.log(data);
+
+
+var params = [
+    {
+        id: 1,
+        type: 2
+    },
+    {
+        id: 2
+    }
+];
+var data = match(params, [{
+    id: '$${{id}}',
+    title: 'string',
+    type: "$${{type}} || 'abc'"
+}]);
+console.log(data);
