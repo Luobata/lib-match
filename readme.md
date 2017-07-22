@@ -47,9 +47,9 @@
     // 映射 function
     var data = match(params, {
         pid: 1,
-        id: function (params, data) {
-            // this 指向params data 指向返回值对象 params 指向输入的params对象
-            return this.pid + this.id + data.pid;
+        id: function (data) {
+            // this 指向自身 data 指向params
+            return data.pid + data.id + this.pid;
         }
     });
 

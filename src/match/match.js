@@ -1,4 +1,4 @@
-import parse from 'MATCH/parse';
+import { parse , parseToData } from 'MATCH/parse';
 import {
     isFun,
     isObj,
@@ -14,7 +14,8 @@ let matchObject = function (
     let result = {};
     for (let i in obj) {
         exp = parse(obj[i]);
-        result[i] = data[exp['matchParam']] || exp['default'];
+        result[i] = parseToData(exp, data, result);
+        //result[i] = exp['noMatch'] || data[exp['matchParam']] || exp['default'];
     }
 
     return result;

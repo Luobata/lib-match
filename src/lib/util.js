@@ -9,3 +9,7 @@ export const isFun = function (obj) {
 export const isArray = function (obj) {
     return !isObj(obj) && (obj instanceof Array);
 };
+
+export const isStr = function (str) {
+    return typeof str === 'string';
+};
