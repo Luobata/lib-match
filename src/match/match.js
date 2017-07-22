@@ -15,7 +15,6 @@ let matchObject = function (
     for (let i in obj) {
         exp = parse(obj[i]);
         result[i] = parseToData(exp, data, result);
-        //result[i] = exp['noMatch'] || data[exp['matchParam']] || exp['default'];
     }
 
     return result;

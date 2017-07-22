@@ -5,7 +5,8 @@ import {
     isFun,
     isObj,
     isStr,
-    isArray
+    isArray,
+    typeCharge
 } from 'LIB/util';
 
 export const parse = function (
@@ -16,6 +17,7 @@ export const parse = function (
     let token;
     let parseResult = {
     };
+    const tokenReg = /\$\$\{\{(.*)\}\}/;
 
     if (isFun(str)) {
         // 执行函数
@@ -23,7 +25,7 @@ export const parse = function (
         return parseResult;
     }
 
-    if (!isStr(str)) {
+    if (!isStr(str) || !tokenReg.test(str)) {
         // 不是字符串 直接返回
         parseResult['noMatch'] = str;
         return parseResult;
@@ -32,13 +34,7 @@ export const parse = function (
     strArr = str.split('||');
     for (i of strArr) {
 
-        token = i.trim().match(/\$\$\{\{(.*)\}\}/);
-
-        if (!token) {
-            // 直接赋值
-            parseResult['noMatch'] = i;
-            continue;
-        }
+        token = i.trim().match(tokenReg);
 
         if (token && token.length && token.length >= 1) {
             parseResult['matchParam'] = token[1];
@@ -69,7 +65,7 @@ export const parseToData = function (
     }
 
     if (exp['matchParam']) {
-        result = data[exp['matchParam']] || exp['default'];
+        result = data[exp['matchParam']] || typeCharge(exp['default']);
         return result;
     }
 
