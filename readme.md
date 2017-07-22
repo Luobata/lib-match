@@ -38,7 +38,7 @@
     }]);
 
     // 映射 params.data
-    var data = match(params, ['$${{data}}', {
+    var data = match(params, ['data', {
         id: '$${{id}}',
         title: 'string',
         type: "$${{type}} || 'abc'"

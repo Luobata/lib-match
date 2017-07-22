@@ -7,6 +7,21 @@ var data = match(params, {
     title: '$${{abc}}'
 });
 console.log(data);
+
+var params = {
+    abc: 1,
+    name: {
+        id: 100
+    }
+};
+var data = match(params, {
+    title: '$${{abc}}',
+    id: {
+        id: '$${{name.id}}'
+    }
+});
+console.log(data);
+
 var params = {
     abcd: 1
 };
@@ -62,6 +77,24 @@ var params = [
     }
 ];
 var data = match(params, [{
+    id: '$${{id}}',
+    title: 'string',
+    type: "$${{type}} || 'abc'"
+}]);
+console.log(data);
+
+var params = {
+    data: [
+        {
+            id: 2,
+            type: 2
+        },
+        {
+            id: 2
+        }
+    ]
+};
+var data = match(params, ['data', {
     id: '$${{id}}',
     title: 'string',
     type: "$${{type}} || 'abc'"

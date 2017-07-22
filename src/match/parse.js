@@ -9,6 +9,11 @@ import {
     typeCharge
 } from 'LIB/util';
 
+import {
+    matchObject,
+    matchArray
+} from 'MATCH/match.js';
+
 export const parse = function (
     str: any
 ) {
@@ -18,6 +23,12 @@ export const parse = function (
     let parseResult = {
     };
     const tokenReg = /\$\$\{\{(.*)\}\}/;
+
+    if (isObj(str)) {
+        // 递归映射
+        parseResult['matchObject'] = str;
+        return parseResult;
+    }
 
     if (isFun(str)) {
         // 执行函数
@@ -59,13 +70,20 @@ export const parseToData = function (
 ) {
     let result;
 
+
+    if (exp['matchObject']) {
+        result = matchObject(data, exp['matchObject']);
+        return result;
+    }
+
     if (exp['noMatch']) {
         result = exp['noMatch'];
         return result;
     }
 
     if (exp['matchParam']) {
-        result = data[exp['matchParam']] || typeCharge(exp['default']);
+        //result = data[exp['matchParam']] || typeCharge(exp['default']);
+        result = getData(data, exp['matchParam']) || typeCharge(exp['default']);
         return result;
     }
 
@@ -73,4 +91,18 @@ export const parseToData = function (
         result = exp['matchFun'].call(that, data);
         return result;
     }
+};
+
+const getData = function (
+    data: object,
+    exp: str // 对应的对象字面量字符串 xx.xxx
+) {
+    let par = data;
+    let token = exp.split('.');
+    // 递归获取
+    for (let i of token) {
+        par = par[i];
+    }
+
+    return par;
 };

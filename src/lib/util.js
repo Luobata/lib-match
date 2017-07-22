@@ -21,7 +21,6 @@ export const isStr = function (str) {
 export const typeCharge = function (
     str: string
 ) {
-    debugger;
     str = str.trim();
     const stringReg = /^(['"])(.*)\1$/;
 

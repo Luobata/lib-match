@@ -9,7 +9,7 @@ import {
 /**
  * 对象映射
  */
-let matchObject = function (
+export const matchObject = function (
     data: any,
     obj: object
 ) {
@@ -26,7 +26,7 @@ let matchObject = function (
 /**
  * 数组映射
  */
-let matchArray = function (
+export const matchArray = function (
     data: any,
     arr: Array
 ) {
@@ -37,6 +37,14 @@ let matchArray = function (
         // 直接映射 data
         for (let i = 0; i < data.length; i++) {
             result[i] = matchObject(data[i], arr[0]);
+        }
+    }
+
+    if (arr.length === 2) {
+        // 映射data的对象
+        data= data[arr[0]];
+        for (let i = 0; i < data.length; i++) {
+            result[i] = matchObject(data[i], arr[1]);
         }
     }
 
