@@ -21,6 +21,7 @@ export const isStr = function (str) {
 export const typeCharge = function (
     str: string
 ) {
+    debugger;
     str = str.trim();
     const stringReg = /^(['"])(.*)\1$/;
 
@@ -33,7 +34,7 @@ export const typeCharge = function (
         // 说明不是字符串类型的值
         let num = parseFloat(str);
         let boo = str === 'false' ? false : (str === 'true' ? true: '');
-        str = num && boo !== '' ? num || boo : str;
+        str = num || boo !== '' ? num || boo : str;
         return str;
     }
 };

@@ -15,7 +15,19 @@ var data = match(params, {
 });
 console.log(data);
 var data = match(params, {
+    title: '$${{abc}} || true'
+});
+console.log(data);
+var data = match(params, {
+    title: '$${{abc}} || false'
+});
+console.log(data);
+var data = match(params, {
     title: '$${{abc}} || "123"'
+});
+console.log(data);
+var data = match(params, {
+    title: "$${{abc}} || '123'"
 });
 console.log(data);
 
