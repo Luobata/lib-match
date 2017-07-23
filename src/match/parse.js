@@ -30,6 +30,12 @@ export const parse = function (
         return parseResult;
     }
 
+    if (isArray(str)) {
+        // 数组递归映射
+        parseResult['matchArray'] = str;
+        return parseResult;
+    }
+
     if (isFun(str)) {
         // 执行函数
         parseResult['matchFun'] = str;
@@ -73,6 +79,11 @@ export const parseToData = function (
 
     if (exp['matchObject']) {
         result = matchObject(data, exp['matchObject']);
+        return result;
+    }
+    
+    if (exp['matchArray']) {
+        result = matchArray(data, exp['matchArray']);
         return result;
     }
 

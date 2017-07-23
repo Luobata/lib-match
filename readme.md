@@ -23,7 +23,7 @@
     var data = match(params, {
         code: '$${{code}}',
         msg: '$${{msg}}',
-        data: ['$${{data}}', {
+        data: ['data', {
             id: '$${{id}}',
             title: 'string',
             type: "$${{type}} || 'abc'"

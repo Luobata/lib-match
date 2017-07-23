@@ -1,5 +1,6 @@
 import match from './src/index';
 
+
 var params = {
     abc: 1
 };
@@ -99,4 +100,28 @@ var data = match(params, ['data', {
     title: 'string',
     type: "$${{type}} || 'abc'"
 }]);
+console.log(data);
+var params = {
+    code: 200,
+    msg: 'ok',
+    data: [
+        {
+            id: 1,
+            type: 'a'
+        },
+        {
+            id: 2
+        }
+    ]
+};
+// 映射对象数组
+var data = match(params, {
+    code: '$${{code}}',
+    msg: '$${{msg}}',
+    data: ['data', {
+        id: '$${{id}}',
+        title: 'string',
+        type: "$${{type}} || 'abc'"
+    }]
+});
 console.log(data);
