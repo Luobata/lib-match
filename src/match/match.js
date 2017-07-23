@@ -4,6 +4,7 @@ import {
     isObj,
     isArray
 } from 'LIB/util';
+import { pushStack } from 'MATCH/stack';
 
 
 /**
@@ -51,17 +52,26 @@ export const matchArray = function (
     return result;
 };
 
-export default function init (combineData, keyData) {
-    let matchData = {};
-    let result;
+const match = {
+    parse: (combineData, keyData) => {
+        let matchData = {};
+        let result;
 
-    if (isObj(keyData)) {
-        result = matchObject(combineData, keyData);
+        if (isObj(keyData)) {
+            result = matchObject(combineData, keyData);
+        }
+
+        if (isArray(keyData)) {
+            result = matchArray(combineData, keyData);
+        }
+
+        return result;
+    },
+    register: (
+        obj: object | Array
+    ) => {
+        pushStack(obj);
     }
-
-    if (isArray(keyData)) {
-        result = matchArray(combineData, keyData);
-    }
-
-    return result;
 };
+
+export default match;

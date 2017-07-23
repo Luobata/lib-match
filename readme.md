@@ -6,7 +6,7 @@
 1. 常规对象匹配
 ```
     // 映射普通字段
-    var data = match(params, {
+    var data = match.parse(params, {
         title: '$${{title}}',
         msg: 'this is string'
     });
@@ -14,13 +14,13 @@
 
     // 映射带有默认值
     var a = 1;
-    var data = match(params, {
+    var data = match.parse(params, {
         title: '$${{title}} || 123', // 默认值为123
         id: '$${{id}} || {{a}}' // 默认值为变量a的值
     });
 
     // 映射对象数组
-    var data = match(params, {
+    var data = match.parse(params, {
         code: '$${{code}}',
         msg: '$${{msg}}',
         data: ['data', {
@@ -31,21 +31,21 @@
     });
 
     // 直接映射数组
-    var data = match(params, [{
+    var data = match.parse(params, [{
         id: '$${{id}}',
         title: 'string',
         type: "$${{type}} || 'abc'"
     }]);
 
     // 映射 params.data
-    var data = match(params, ['data', {
+    var data = match.parse(params, ['data', {
         id: '$${{id}}',
         title: 'string',
         type: "$${{type}} || 'abc'"
     }]);
 
     // 映射 function
-    var data = match(params, {
+    var data = match.parse(params, {
         pid: 1,
         id: function (data) {
             // this 指向自身 data 指向params
@@ -63,11 +63,11 @@
         }
     };
     match.register('format', format);
-    var data = match(params, {
+    var data = match.parse(params, {
         pid: 1,
-        id: function (params, data, format) {
-            // this 指向params data 指向返回值对象 params 指向输入的params对象
-            return this.pid + this.id + data.pid + format.b();
+        id: function (data, format) {
+            // this 指向自身 data 指向params
+            return data.pid + data.id + this.pid + format.b();
         }
     });
 

@@ -1,3 +1,3 @@
-import init from 'MATCH/match';
+import match from 'MATCH/match';
 
-export default init;
+export default match;

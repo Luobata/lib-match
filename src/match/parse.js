@@ -12,7 +12,9 @@ import {
 import {
     matchObject,
     matchArray
-} from 'MATCH/match.js';
+} from 'MATCH/match';
+
+import stack from 'MATCH/stack';
 
 export const parse = function (
     str: any
@@ -99,7 +101,8 @@ export const parseToData = function (
     }
 
     if (exp['matchFun']) {
-        result = exp['matchFun'].call(that, data);
+        console.log(stack);
+        result = exp['matchFun'].apply(that, [data].concat(stack));
         return result;
     }
 };
