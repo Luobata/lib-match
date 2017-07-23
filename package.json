@@ -4,8 +4,8 @@
       "build": "node build-prod/build.js"
   },
   "name": "lib-match",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.2",
+  "description": "一个应用于前后端完全分离时代下的字段映射库",
   "main": "./src/index.js",
   "dependencies": {
       "babel-core": "^6.24.0",

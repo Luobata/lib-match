@@ -61,7 +61,11 @@ export const parse = function (
         }
 
         if (!token) {
+            //if (i.indexOf('{{') !== -1) {
+            //    parseResult['defaultParam'] = 'return b';
+            //} else {
             parseResult['default'] = i.trim();
+            //}
         }
     }
 
@@ -94,17 +98,27 @@ export const parseToData = function (
         return result;
     }
 
+    //if (exp['defaultParam']) {
+    //    result = getData(data, exp['matchParam']) || getParams(exp['defaultParam'], obj);
+    //    return result;
+    //}
+
     if (exp['matchParam']) {
-        //result = data[exp['matchParam']] || typeCharge(exp['default']);
         result = getData(data, exp['matchParam']) || typeCharge(exp['default']);
         return result;
     }
 
     if (exp['matchFun']) {
-        console.log(stack);
         result = exp['matchFun'].apply(that, [data].concat(stack));
         return result;
     }
+};
+
+const getParams = function (str, obj) {
+    let createFun = function () {
+        return new Function (str);
+    }
+    obj.title = createFun();
 };
 
 const getData = function (

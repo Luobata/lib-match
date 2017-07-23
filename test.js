@@ -51,6 +51,7 @@ var b = 1;
 var data = match.parse(params, {
     title: '$${{abc}} || {{b}}'
 });
+console.log(data);
 
 var params = {
     pid: 1,
