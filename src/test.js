@@ -1,5 +1,4 @@
-import match from './src/index';
-
+import match from './index';
 
 var params = {
     abc: 1

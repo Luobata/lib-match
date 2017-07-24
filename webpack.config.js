@@ -5,7 +5,7 @@ var root = path.resolve(__dirname, './');
 module.exports = {
     devtool: 'source-map',
 
-    entry:  __dirname + "/test.js",
+    entry:  __dirname + "/src/test.js",
     output: {
         stats: {
             colors: true
@@ -50,7 +50,7 @@ module.exports = {
     ],
 
     devServer: {
-        contentBase: "./",
+        contentBase: "./src/",
         port: 9999,
         colors: true,
         historyApiFallback: true,
