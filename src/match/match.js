@@ -5,6 +5,8 @@ import {
     isArray
 } from 'LIB/util';
 import { pushStack } from 'MATCH/stack';
+import filter from 'MATCH/filter';
+import config from 'MATCH/config';
 
 
 /**
@@ -19,6 +21,7 @@ export const matchObject = function (
     for (let i in obj) {
         exp = parse(obj[i]);
         result[i] = parseToData(exp, data, result);
+        filter(i, result);
     }
 
     return result;
@@ -53,7 +56,10 @@ export const matchArray = function (
 };
 
 const match = {
-    parse: (combineData, keyData) => {
+    parse: (
+        combineData: object | Array,
+        keyData: object | Array
+    ) => {
         let matchData = {};
         let result;
 
@@ -71,6 +77,10 @@ const match = {
         obj: object | Array
     ) => {
         pushStack(obj);
+    },
+    config: (
+        obj: object
+    ) => {
     }
 };
 

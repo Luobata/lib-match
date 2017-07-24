@@ -147,3 +147,8 @@ var data = match.parse(params, {
     }
 });
 console.log(data);
+
+var data = match.parse(params, {
+    id: '$${{xx}}'
+});
+console.log(data);

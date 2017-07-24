@@ -21,19 +21,23 @@ export const isStr = function (str) {
 export const typeCharge = function (
     str: string
 ) {
-    str = str.trim();
-    const stringReg = /^(['"])(.*)\1$/;
+    try {
+        str = str.trim();
+        const stringReg = /^(['"])(.*)\1$/;
 
-    // 若果是以''包住 或者""包住
-    if (stringReg.test(str)) {
-        // 返回字符串
-        str = str.match(stringReg).pop(); 
-        return str;
-    } else {
-        // 说明不是字符串类型的值
-        let num = parseFloat(str);
-        let boo = str === 'false' ? false : (str === 'true' ? true: '');
-        str = num || boo !== '' ? num || boo : str;
+        // 若果是以''包住 或者""包住
+        if (stringReg.test(str)) {
+            // 返回字符串
+            str = str.match(stringReg).pop(); 
+            return str;
+        } else {
+            // 说明不是字符串类型的值
+            let num = parseFloat(str);
+            let boo = str === 'false' ? false : (str === 'true' ? true: '');
+            str = num || boo !== '' ? num || boo : str;
+            return str;
+        }
+    } catch (e) {
         return str;
     }
 };
