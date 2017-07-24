@@ -10,6 +10,10 @@ const filter = function (
     if (config.filterUndefined && result[key] === undefined) {
         delete result[key];
     }
+
+    if (config.filterNull && result[key] === null) {
+        delete result[key];
+    }
 };
 
 export default filter;
