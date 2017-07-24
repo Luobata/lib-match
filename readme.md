@@ -5,6 +5,8 @@
 ### 语法
 1. 常规对象匹配
 ```
+    var match = require('lib-match');
+
     // 映射普通字段
     var data = match.parse(params, {
         title: '$${{title}}',
@@ -15,8 +17,8 @@
     // 映射带有默认值
     var a = 1;
     var data = match.parse(params, {
-        title: '$${{title}} || 123', // 默认值为123
-        id: '$${{id}} || {{a}}' // 默认值为变量a的值
+        title: '$${{title}} || 123', // 默认值为number类型 123
+        id: '$${{id}} || "123"' // 默认值为string类型 123
     });
 
     // 映射对象数组
