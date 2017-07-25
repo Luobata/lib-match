@@ -4,7 +4,7 @@ import {
     isObj,
     isArray
 } from 'LIB/util';
-import { pushStack } from 'MATCH/stack';
+import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
 import filter from 'MATCH/filter';
 import config from 'MATCH/config';
 
@@ -74,9 +74,29 @@ const match = {
         return result;
     },
     register: (
-        obj: object | Array
+        obj: object | Array,
+        name: string
     ) => {
-        pushStack(obj);
+        pushStack({
+            value: obj,
+            name: name
+        });
+    },
+    update: (
+        obj: object | Array,
+        name: string
+    ) => {
+        updateStack(obj, name);
+    },
+    // 移除register的内容
+    remove: (
+        name: string
+    ) => {
+        removeStack(name);
+    },
+    removeAll: (
+    ) => {
+        cleanStack();
     },
     config: (
         obj: object

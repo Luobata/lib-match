@@ -6,7 +6,8 @@ import {
     isObj,
     isStr,
     isArray,
-    typeCharge
+    typeCharge,
+    objToArray
 } from 'LIB/util';
 
 import {
@@ -80,37 +81,41 @@ export const parseToData = function (
     data: object, // 映射的params数组
     that: object // 返回对象指针
 ) {
-    let result;
+    try {
+        let result;
 
 
-    if (exp['matchObject']) {
-        result = matchObject(data, exp['matchObject']);
-        return result;
-    }
-    
-    if (exp['matchArray']) {
-        result = matchArray(data, exp['matchArray']);
-        return result;
-    }
+        if (exp['matchObject']) {
+            result = matchObject(data, exp['matchObject']);
+            return result;
+        }
 
-    if (exp['noMatch']) {
-        result = exp['noMatch'];
-        return result;
-    }
+        if (exp['matchArray']) {
+            result = matchArray(data, exp['matchArray']);
+            return result;
+        }
 
-    //if (exp['defaultParam']) {
-    //    result = getData(data, exp['matchParam']) || getParams(exp['defaultParam'], obj);
-    //    return result;
-    //}
+        if (exp['noMatch']) {
+            result = exp['noMatch'];
+            return result;
+        }
 
-    if (exp['matchParam']) {
-        result = getData(data, exp['matchParam']) || typeCharge(exp['default']);
-        return result;
-    }
+        //if (exp['defaultParam']) {
+        //    result = getData(data, exp['matchParam']) || getParams(exp['defaultParam'], obj);
+        //    return result;
+        //}
 
-    if (exp['matchFun']) {
-        result = exp['matchFun'].apply(that, [data].concat(stack));
-        return result;
+        if (exp['matchParam']) {
+            result = getData(data, exp['matchParam']) || typeCharge(exp['default']);
+            return result;
+        }
+
+        if (exp['matchFun']) {
+            result = exp['matchFun'].apply(that, [data].concat(objToArray(stack, 'value')));
+            return result;
+        }
+    } catch (e) {
+        console.log(e);
     }
 };
 

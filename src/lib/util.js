@@ -41,3 +41,19 @@ export const typeCharge = function (
         return str;
     }
 };
+
+export const objToArray = function (
+    data: Array, // 转换的对象数组
+    key: string // 转化你的值
+) {
+    try {
+        let arr = [];
+        for (let i of data) {
+            arr = arr.concat(i[key]);
+        }
+
+        return arr;
+    } catch (e) {
+        return [];
+    };
+};

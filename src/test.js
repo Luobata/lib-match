@@ -138,7 +138,46 @@ var format = {
         return 2;
     }
 };
-match.register(format);
+match.register(format, 'format');
+var data = match.parse(params, {
+    pid: 1,
+    id: function (data, format) {
+        // this 指向自身 data 指向params
+        return data.pid + data.id + this.pid + format.b();
+    }
+});
+console.log(data);
+
+// 测试register为一个数组
+match.register([format], 'format');
+var data = match.parse(params, {
+    pid: 1,
+    id: function (data, format) {
+        // this 指向自身 data 指向params
+        return data.pid + data.id + this.pid + format.b();
+    }
+});
+console.log(data);
+
+// 测试update
+var format = {
+    a: function () {
+        return 11;
+    },
+    b: function () {
+        return 22;
+    }
+};
+match.update(format, 'format');
+var data = match.parse(params, {
+    pid: 1,
+    id: function (data, format) {
+        // this 指向自身 data 指向params
+        return data.pid + data.id + this.pid + format.b();
+    }
+});
+console.log(data);
+match.remove('format');
 var data = match.parse(params, {
     pid: 1,
     id: function (data, format) {
