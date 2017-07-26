@@ -115,3 +115,12 @@
     });
 
 ```
+
+3. 全局config配置
+```
+    // 默认开启过滤undefined和null
+    let config = {
+        filterUndefined: true, // 过滤undefined
+        filterNull: true // 过滤null
+    };
+```
