@@ -17,7 +17,8 @@ module.exports = {
     resolve: {
         alias: {
            MATCH: path.resolve(__dirname, 'src/match'),
-           LIB: path.resolve(__dirname, 'src/lib')
+           LIB: path.resolve(__dirname, 'src/lib'),
+           TEST: path.resolve(__dirname, 'src/test')
         }
     },
     module: {

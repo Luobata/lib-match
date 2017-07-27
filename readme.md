@@ -121,6 +121,18 @@
     // 默认开启过滤undefined和null
     let config = {
         filterUndefined: true, // 过滤undefined
-        filterNull: true // 过滤null
+        filterNull: true, // 过滤null
+        autoComplete: false // 自动补全
     };
+
+    // 修改默认config
+    var params = {
+        pid: 1,
+        id: 2
+    };
+    match.config({autoComplete: true});
+    var data = match.parse(params, {
+        id: '$${{id}}'
+    });
+    console.log(data); // id:2 pid: 1
 ```

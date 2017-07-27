@@ -6,7 +6,8 @@ import {
 } from 'LIB/util';
 import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
 import filter from 'MATCH/filter';
-import config from 'MATCH/config';
+import autoComplete from 'MATCH/auto-complete';
+import config , { extendConfig } from 'MATCH/config';
 
 
 /**
@@ -18,11 +19,13 @@ export const matchObject = function (
 ) {
     let exp;
     let result = {};
+
     for (let i in obj) {
         exp = parse(obj[i]);
         result[i] = parseToData(exp, data, result);
         filter(i, result);
     }
+    autoComplete(result, data);
 
     return result;
 };
@@ -101,6 +104,7 @@ const match = {
     config: (
         obj: object
     ) => {
+        extendConfig(obj);
     }
 };
 

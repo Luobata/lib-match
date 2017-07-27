@@ -3,10 +3,10 @@
  */
 import config from 'MATCH/config';
 
-const filter = function (
+const filter = (
     key: string,
     result: ojbect 
-) {
+) => {
     if (config.filterUndefined && result[key] === undefined) {
         delete result[key];
     }
