@@ -1,0 +1,57 @@
+var webpack = require('webpack');
+var webpackMerge = require('webpack-merge')
+var path = require('path');
+
+var root = path.resolve(__dirname, '../').replace(/\\/g, '/') + '/';
+var assetsRoot = root +　'dist/';
+var assetsSubDirectory = 'static/';
+var productionSourceMap = true;
+var productionGzip = false;
+
+var devWebpackConfig = require('../webpack.config.js');
+
+devWebpackConfig.plugins = [];
+
+var prodWebpackConfig = {
+    devtool: productionSourceMap ? '#source-map' : false,
+    entry : {
+        app : "./src/index.js"
+    },
+    output: {
+        path: assetsRoot,
+        filename: assetsRoot + "bundle.js"
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: '"production"'
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
+        }),
+        new webpack.optimize.OccurenceOrderPlugin()
+    ]
+};
+
+if (productionGzip) {
+  var CompressionWebpackPlugin = require('compression-webpack-plugin')
+
+  webpackConfig.plugins.push(
+    new CompressionWebpackPlugin({
+      asset: '[path].gz[query]',
+      algorithm: 'gzip',
+      test: new RegExp(
+        '\\.(' +
+        config.build.productionGzipExtensions.join('|') +
+        ')$'
+      ),
+      threshold: 10240,
+      minRatio: 0.8
+    })
+  )
+}
+
+module.exports = webpackMerge(devWebpackConfig, prodWebpackConfig);
