@@ -17,6 +17,8 @@ var prodWebpackConfig = {
     entry : root + "/src/index.js",
     output: {
         path: assetsRoot,
+        library: 'match',
+        libraryTarget: 'amd',
         filename: "bundle.js"
     },
     plugins: [
