@@ -14,12 +14,10 @@ devWebpackConfig.plugins = [];
 
 var prodWebpackConfig = {
     devtool: productionSourceMap ? '#source-map' : false,
-    entry : {
-        app : "./src/index.js"
-    },
+    entry : root + "/src/index.js",
     output: {
         path: assetsRoot,
-        filename: assetsRoot + "bundle.js"
+        filename: "bundle.js"
     },
     plugins: [
         new webpack.DefinePlugin({
