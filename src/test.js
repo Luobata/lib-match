@@ -3,5 +3,6 @@
 //console.log(match);
 //console.log(m);
 
-require('TEST/test-1.js');
-require('TEST/test-2.js');
+import 'TEST/test-1.js';
+import 'TEST/test-2.js';
+import 'TEST/test-3.js';
