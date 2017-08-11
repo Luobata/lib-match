@@ -38,7 +38,7 @@ export const matchArray = function (
     arr: Array
 ) {
     let exp;
-    let result = {};
+    let result = [];
 
     if (arr.length === 1) {
         // 直接映射 data
