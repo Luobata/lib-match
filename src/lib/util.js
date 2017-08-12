@@ -1,26 +1,30 @@
-export const isObj = function (obj) {
-    return typeof obj === 'object' && !(obj instanceof Array);
+export const isObj = (obj) => {
+    return Object.prototype.toString.call(obj) === '[object Object]';
 };
 
-export const isFun = function (obj) {
-    return typeof obj === 'function';
+export const isFun = (obj) => {
+    return Object.prototype.toString.call(obj) === '[object Function]';
 };
 
-export const isArray = function (obj) {
-    return !isObj(obj) && (obj instanceof Array);
+export const isArray = (obj) => {
+    return Object.prototype.toString.call(obj) === '[object Array]';
 };
 
-export const isStr = function (str) {
-    return typeof str === 'string';
+export const isStr = (str) => {
+    return Object.prototype.toString.call(str) === '[object String]';
+};
+
+export const isNum = (num) => {
+    return Object.prototype.toString.call(num) === '[object Number]';
 };
 
 
 /**
  * @description 类型转换
  **/
-export const typeCharge = function (
+export const typeCharge = (
     str: string
-) {
+) => {
     try {
         str = str.trim();
         const stringReg = /^(['"])(.*)\1$/;
@@ -42,10 +46,10 @@ export const typeCharge = function (
     }
 };
 
-export const objToArray = function (
+export const objToArray = (
     data: Array, // 转换的对象数组
     key: string // 转化你的值
-) {
+) => {
     try {
         let arr = [];
         for (let i of data) {

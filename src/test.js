@@ -3,6 +3,7 @@
 //console.log(match);
 //console.log(m);
 
-import 'TEST/test-1.js';
-import 'TEST/test-2.js';
-import 'TEST/test-3.js';
+import 'TEST/test-1';
+import 'TEST/test-2';
+import 'TEST/test-3';
+import 'TEST/test-4';

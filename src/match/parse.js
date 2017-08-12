@@ -3,6 +3,7 @@
  */
 import {
     isFun,
+    isNum,
     isObj,
     isStr,
     isArray,
@@ -25,7 +26,8 @@ export const parse = function (
     let token;
     let parseResult = {
     };
-    const tokenReg = /\$\$\{\{(.*)\}\}/;
+    const objTokenReg = /\$\$\{\{(.*)\}\}/;
+    const arrTokenReg = /\$\{(.*)\}/;
 
     if (isObj(str)) {
         // 递归映射
@@ -45,7 +47,7 @@ export const parse = function (
         return parseResult;
     }
 
-    if (!isStr(str) || !tokenReg.test(str)) {
+    if (!isStr(str) || (!objTokenReg.test(str) && !arrTokenReg.test(str))) {
         // 不是字符串 直接返回
         parseResult['noMatch'] = str;
         return parseResult;
@@ -54,10 +56,17 @@ export const parse = function (
     strArr = str.split('||');
     for (i of strArr) {
 
-        token = i.trim().match(tokenReg);
+        token = i.trim().match(objTokenReg);
 
         if (token && token.length && token.length >= 1) {
             parseResult['matchParam'] = token[1];
+            continue;
+        }
+
+        token = i.trim().match(arrTokenReg);
+
+        if (token && token.length && token.length >= 1) {
+            parseResult['matchArrParam'] = token[1];
             continue;
         }
 
@@ -66,6 +75,7 @@ export const parse = function (
             //    parseResult['defaultParam'] = 'return b';
             //} else {
             parseResult['default'] = i.trim();
+            continue;
             //}
         }
     }
@@ -110,6 +120,11 @@ export const parseToData = function (
             return result;
         }
 
+        if(exp['matchArrParam']) {
+            result = getArrData(data, exp['matchArrParam']) || typeCharge(exp['default']);
+            return result;
+        }
+
         if (exp['matchFun']) {
             result = exp['matchFun'].apply(that, [data].concat(objToArray(stack, 'value')));
             return result;
@@ -119,17 +134,17 @@ export const parseToData = function (
     }
 };
 
-const getParams = function (str, obj) {
+const getParams = (str, obj) => {
     let createFun = function () {
         return new Function (str);
     }
     obj.title = createFun();
 };
 
-const getData = function (
+const getData = (
     data: object,
-    exp: str // 对应的对象字面量字符串 xx.xxx
-) {
+    exp: string // 对应的对象字面量字符串 xx.xxx
+) => {
     let par = data;
     let token = exp.split('.');
     // 递归获取
@@ -138,4 +153,18 @@ const getData = function (
     }
 
     return par;
+};
+
+const getArrData = (
+    data: object,
+    exp: string // 对应的数组序号字符串字面量
+) => {
+    let token = exp.split('.');
+    let index = parseInt(token.shift(), 10);
+    if (!isNum(index) || data[index] === undefined) {
+        console.log('error: the Array index is not exist!');
+        return undefined;
+    }
+
+    return getData(data[index], token.join('.'));
 };
