@@ -2,6 +2,7 @@
  * 测试数组对象
  */
 import match from 'MATCH/match';
+const expect = require('chai').expect;
 
 let params = [
     {
@@ -24,4 +25,15 @@ let data = match.parse(params, {
     }
 });
 
-console.log(data);
+expect(data).to.be.eql({
+    code: 200,
+    msg: 'error',
+    data: [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+    ]
+});

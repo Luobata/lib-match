@@ -1,27 +1,30 @@
 {
   "scripts": {
-      "test": "webpack-dev-server --inline --hot --host 0.0.0.0",
-      "build": "node build/build.js"
+    "test": "webpack-dev-server --inline --hot --host 0.0.0.0",
+    "build": "node build/build.js"
   },
   "name": "lib-match",
   "version": "0.0.10",
   "description": "一个应用于前后端完全分离时代下的字段映射库",
   "main": "./dist/bundle.js",
   "dependencies": {
-      "ora": "0.3.0",
-      "shelljs": "0.7.5",
-      "babel-core": "^6.24.0",
-      "babel-loader": "^6.4.1",
-      "babel-preset-es2015": "^6.22.0",
-      "babel-preset-flow": "^6.23.0",
-      "babel-preset-react": "^6.23.0",
-      "webpack": "^1.13.2",
-      "webpack-dev-middleware": "^1.8.3",
-      "webpack-dev-server": "^1.16.2",
-      "webpack-hot-middleware": "^2.12.2",
-      "webpack-merge": "^0.14.1"
+    "ora": "0.3.0",
+    "shelljs": "0.7.5",
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.23.0",
+    "webpack": "^1.13.2",
+    "webpack-dev-middleware": "^1.8.3",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-hot-middleware": "^2.12.2",
+    "webpack-merge": "^0.14.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "mocha": "^3.5.0"
+  },
   "keywords": [],
   "author": {
     "name": "luobata"
