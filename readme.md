@@ -1,11 +1,21 @@
 # lib-match
+一个用于前后端完全分离的字段映射库，使得前端的数据格式定义完全脱离后端的限制，做到真正的前后端完全分离。同时可用于解决复杂字段的处理场景，致力于一次match，完全转换，让data层的处理更加有序。
 
-## 一个用于前后端完全分离的字段映射库
+优势：
+1. 减少代码量，一次match，解决复杂场景。
+2. 丰富的api，不仅支持常规对象匹配，数组对象匹配，还提供默认值，自定义function。同时可配置多样的config来实现特殊字符过滤，相同字段直接补全等功能。
 
-### 语法
+ps: 配合es6语法代码真的可以很简洁。
+
+### Installation
+```
+npm install lib-match --save
+```
+
+### Usage
 1. 常规对象匹配
 ```
-    var match = require('lib-match');
+    const match = require('lib-match');
 
     // 映射普通字段
     var data = match.parse(params, {
