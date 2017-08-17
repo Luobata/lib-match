@@ -28,7 +28,7 @@ params.d = 4;
 
 ### 安装 Installation
 ```
-npm install lib-match --save
+npm install lib-match --save-dev
 ```
 
 ### 使用方法 Usage
