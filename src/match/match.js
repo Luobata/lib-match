@@ -21,7 +21,7 @@ export const matchObject = function (
     let result = {};
 
     for (let i in obj) {
-        exp = parse(obj[i]);
+        exp = parse(obj[i], i);
         result[i] = parseToData(exp, data, result);
         filter(i, result);
     }

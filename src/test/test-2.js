@@ -43,3 +43,23 @@ data = match.parse(params, {
 expect(data).to.be.eql({
     id: 2
 });
+
+// 测试config ignoretokenkey
+data = match.parseConfig(params, {
+    id: '$${{id}}',
+    pid: '$${{pid}}'
+}, {
+    ignoreTokenKey: ['id']
+});
+
+expect(data).to.be.eql({
+    id: '$${{id}}',
+    pid: 1
+});
+
+data = match.parse(params, {
+    id: '$${{id}}'
+});
+expect(data).to.be.eql({
+    id: 2
+});

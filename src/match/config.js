@@ -6,7 +6,8 @@ import { isObj } from 'LIB/util';
 let config = {
     filterUndefined: true, // 过滤undefined
     filterNull: true, // 过滤null
-    autoComplete: false // 自动补全
+    autoComplete: false, // 自动补全
+    ignoreTokenKey: [] // 忽略解析的key
 };
 
 export default config;
