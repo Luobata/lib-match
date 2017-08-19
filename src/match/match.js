@@ -76,6 +76,22 @@ const match = {
 
         return result;
     },
+    parseConfig (
+        combineData: object | Array,
+        keyData: object | Array,
+        configTmp: object
+    ) {
+        // 代表此次match使用传入的config
+        const configCache = Object.assign({}, config);
+        let data;
+
+        extendConfig(configTmp);
+        data = this.parse(combineData, keyData);
+        extendConfig(configCache);
+
+        return data;
+
+    },
     register: (
         obj: object | Array,
         name: string
