@@ -4,7 +4,7 @@
     "build": "node build/build.js"
   },
   "name": "lib-match",
-  "version": "0.0.10",
+  "version": "1.0.0",
   "description": "一个应用于前后端完全分离时代下的字段映射库",
   "main": "./dist/bundle.js",
   "dependencies": {
