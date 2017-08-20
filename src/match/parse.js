@@ -33,7 +33,7 @@ export const parse = function (
     };
     const objTokenReg = /\$\$\{\{(.*)\}\}/;
     const arrTokenReg = /\$\{(.*)\}/;
-    const typeTokenReg = /\((boolean|Boolean|int|string)\)\$/;
+    const typeTokenReg = /\((boolean|Boolean|int|string|float)\)\$/;
 
     if (isObj(str)) {
         // 递归映射
@@ -130,12 +130,14 @@ export const parseToData = function (
         //}
 
         if (exp['matchParam']) {
-            result = getData(data, exp['matchParam']) || typeCharge(exp['default'], exp['matchType']);
+            result = getData(data, exp['matchParam'], exp['matchType']);
+            result = result === undefined ? typeCharge(exp['default']) : result;
             return result;
         }
 
         if(exp['matchArrParam']) {
-            result = getArrData(data, exp['matchArrParam']) || typeCharge(exp['default']);
+            result = getArrData(data, exp['matchArrParam']);
+            result = result === undefined ? typeCharge(exp['default']) : result;
             return result;
         }
 
@@ -167,7 +169,7 @@ const getData = (
         par = par[i];
     }
 
-    return type ? typeTrans(par) : par;
+    return type ? typeTrans(par, type) : par;
 };
 
 const getArrData = (

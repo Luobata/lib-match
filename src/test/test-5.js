@@ -7,19 +7,22 @@ let params = {
     pid: 'false',
     name: 1,
     id: '2',
-    city: 1
+    city: 1,
+    district: '1.56'
 };
 let data = match.parse(params, {
     pid: '(boolean)$${{pid}}',
     Pid: '(Boolean)$${{pid}}',
     name: '(Boolean)$${{name}}',
     id: '(int)$${{id}}',
-    city: '(string)$${{city}}'
+    city: '(string)$${{city}}',
+    dis: '(float)$${{district}}'
 });
 expect(data).to.be.eql({
     pid: false,
-    Pid: false,
+    Pid: true,
     name: true,
     id: 2,
-    city: '1'
+    city: '1',
+    dis: 1.56
 });

@@ -1,5 +1,27 @@
 export const typeTrans = (
+    data: any,
+    type: string
 ) => {
+    // 字符串对应的 false 转化为false true 转化为true
+    if (type === 'boolean') {
+        return data.toLowerCase() === 'false' ? false : true;
+    }
+
+    if (type === 'Boolean') {
+        return !!data;
+    }
+
+    if (type === 'int') {
+        return parseInt(data, 10);
+    }
+
+    if (type === 'float') {
+        return parseFloat(data, 10);
+    }
+
+    if (type === 'string') {
+        return data.toString();
+    }
 };
 
 /**
