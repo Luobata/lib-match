@@ -136,7 +136,7 @@ export const parseToData = function (
         }
 
         if(exp['matchArrParam']) {
-            result = getArrData(data, exp['matchArrParam']);
+            result = getArrData(data, exp['matchArrParam'], exp['matchType']);
             result = result === undefined ? typeCharge(exp['default']) : result;
             return result;
         }
@@ -174,7 +174,8 @@ const getData = (
 
 const getArrData = (
     data: object,
-    exp: string // 对应的数组序号字符串字面量
+    exp: string, // 对应的数组序号字符串字面量
+    type: string // 对应的类型
 ) => {
     let token = exp.split('.');
     let index = parseInt(token.shift(), 10);
@@ -183,7 +184,7 @@ const getArrData = (
         return undefined;
     }
 
-    return getData(data[index], token.join('.'));
+    return getData(data[index], token.join('.'), type);
 };
 
 const isIgnore = (
