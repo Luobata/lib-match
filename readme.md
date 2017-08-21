@@ -31,7 +31,7 @@ params.d = 4;
 npm install lib-match --save-dev
 ```
 
-## 优势advantage
+## 优势 advantage
 - 兼容普通对象与数组对象与数组的映射
 - 支持多对一的映射（多个映射params，一个match输出）
 - 支持function映射（功能强大）
