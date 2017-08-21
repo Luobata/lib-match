@@ -32,4 +32,4 @@ npm install lib-match --save-dev
 ```
 
 ### 使用方法 Usage
-[API](https://github.com/Luobata/lib-match/wiki/API) 
+<a href="https://github.com/Luobata/lib-match/wiki/API" target="_blank">API</a>
