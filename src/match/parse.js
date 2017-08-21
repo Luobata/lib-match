@@ -8,7 +8,9 @@ import {
     isStr,
     isArray,
     typeCharge,
-    objToArray
+    objToArray,
+    hasReg,
+    typeTrans
 } from 'LIB/util';
 
 import {
@@ -16,10 +18,13 @@ import {
     matchArray
 } from 'MATCH/match';
 
+import config from 'MATCH/config';
+
 import stack from 'MATCH/stack';
 
 export const parse = function (
-    str: any
+    str: any,
+    key: any
 ) {
     let strArr;
     let i;
@@ -28,6 +33,7 @@ export const parse = function (
     };
     const objTokenReg = /\$\$\{\{(.*)\}\}/;
     const arrTokenReg = /\$\{(.*)\}/;
+    const typeTokenReg = /\((boolean|Boolean|int|string|float)\)\$/;
 
     if (isObj(str)) {
         // 递归映射
@@ -47,7 +53,11 @@ export const parse = function (
         return parseResult;
     }
 
-    if (!isStr(str) || (!objTokenReg.test(str) && !arrTokenReg.test(str))) {
+    if (!isStr(str) ||
+        isIgnore(key) ||
+        (!objTokenReg.test(str) && 
+            !arrTokenReg.test(str))
+    ) {
         // 不是字符串 直接返回
         parseResult['noMatch'] = str;
         return parseResult;
@@ -55,6 +65,10 @@ export const parse = function (
 
     strArr = str.split('||');
     for (i of strArr) {
+        token = i.trim().match(typeTokenReg);
+        if (hasReg(token)) {
+            parseResult['matchType'] = token[1];
+        }
 
         token = i.trim().match(objTokenReg);
 
@@ -116,12 +130,14 @@ export const parseToData = function (
         //}
 
         if (exp['matchParam']) {
-            result = getData(data, exp['matchParam']) || typeCharge(exp['default']);
+            result = getData(data, exp['matchParam'], exp['matchType']);
+            result = result === undefined ? typeCharge(exp['default']) : result;
             return result;
         }
 
         if(exp['matchArrParam']) {
-            result = getArrData(data, exp['matchArrParam']) || typeCharge(exp['default']);
+            result = getArrData(data, exp['matchArrParam'], exp['matchType']);
+            result = result === undefined ? typeCharge(exp['default']) : result;
             return result;
         }
 
@@ -143,7 +159,8 @@ const getParams = (str, obj) => {
 
 const getData = (
     data: object,
-    exp: string // 对应的对象字面量字符串 xx.xxx
+    exp: string, // 对应的对象字面量字符串 xx.xxx
+    type: string // 对应的类型
 ) => {
     let par = data;
     let token = exp.split('.');
@@ -152,12 +169,13 @@ const getData = (
         par = par[i];
     }
 
-    return par;
+    return type ? typeTrans(par, type) : par;
 };
 
 const getArrData = (
     data: object,
-    exp: string // 对应的数组序号字符串字面量
+    exp: string, // 对应的数组序号字符串字面量
+    type: string // 对应的类型
 ) => {
     let token = exp.split('.');
     let index = parseInt(token.shift(), 10);
@@ -166,5 +184,11 @@ const getArrData = (
         return undefined;
     }
 
-    return getData(data[index], token.join('.'));
+    return getData(data[index], token.join('.'), type);
+};
+
+const isIgnore = (
+    key: string
+) => {
+    return config.ignoreTokenKey.indexOf(key) !== -1;
 };
