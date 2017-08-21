@@ -236,7 +236,7 @@ var data = match.parse(params, {
 });
 expect(data).to.be.eql({
     pid: 1,
-    id: 6 
+    id: 6
 });
 
 // 测试update

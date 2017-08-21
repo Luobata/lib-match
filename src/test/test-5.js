@@ -67,6 +67,6 @@ expect(data).to.be.eql([
     {
         id: '2',
         title: 'string',
-        type: 'abc' 
+        type: 'abc'
     }
 ]);
