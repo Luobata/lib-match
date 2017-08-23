@@ -18,7 +18,7 @@ var prodWebpackConfig = {
     output: {
         path: assetsRoot,
         library: 'match',
-        libraryTarget: 'amd',
+        libraryTarget: 'umd',
         filename: "bundle.js"
     },
     plugins: [

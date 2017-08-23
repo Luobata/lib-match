@@ -1,3 +1,3 @@
 import match from 'MATCH/match';
 
-export default match;
+module.exports = match;
