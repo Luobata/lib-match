@@ -33,19 +33,29 @@ export const typeCharge = (
     try {
         str = str.trim();
         const stringReg = /^(['"])(.*)\1$/;
+        const arrayReg = /^\[\]$/;
+        const objectReg = /^\{\}$/;
 
         // 若果是以''包住 或者""包住
         if (stringReg.test(str)) {
             // 返回字符串
             str = str.match(stringReg).pop(); 
             return str;
-        } else {
-            // 说明不是字符串类型的值
-            let num = parseFloat(str);
-            let boo = str === 'false' ? false : (str === 'true' ? true: '');
-            str = num || boo !== '' ? num || boo : str;
-            return str;
         }
+
+        if (arrayReg.test(str)) {
+            return [];
+        }
+
+        if (objectReg.test(str)) {
+            return {};
+        }
+
+        // 说明不是字符串类型的值
+        let num = parseFloat(str);
+        let boo = str === 'false' ? false : (str === 'true' ? true: '');
+        str = num || boo !== '' ? num || boo : str;
+        return str;
     } catch (e) {
         return str;
     }

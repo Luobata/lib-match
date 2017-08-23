@@ -72,6 +72,18 @@ var data = match.parse(params, {
 expect(data).to.be.eql({
     title: '123'
 });
+var data = match.parse(params, {
+    title: '$${{abc}} || []'
+});
+expect(data).to.be.eql({
+    title: []
+});
+var data = match.parse(params, {
+    title: '$${{abc}} || {}'
+});
+expect(data).to.be.eql({
+    title: {}
+});
 
 
 // 暂时没有完成的匹配
