@@ -25,7 +25,6 @@ export const matchObject = function (
         result[i] = parseToData(exp, data, result);
         filter(i, result);
     }
-    autoComplete(result, data);
 
     return result;
 };
@@ -73,6 +72,8 @@ const match = {
         if (isArray(keyData)) {
             result = matchArray(combineData, keyData);
         }
+
+        autoComplete(result, combineData);
 
         return result;
     },

@@ -10,3 +10,4 @@ import 'TEST/test-2';
 import 'TEST/test-3';
 import 'TEST/test-4';
 import 'TEST/test-5';
+import 'TEST/test-6';
