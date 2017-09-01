@@ -1,6 +1,7 @@
 import match from 'MATCH/match';
 const expect = require('chai').expect;
 
+// 测试tmpConfig并且链式调用
 let params = {
     code: '200',
     msg: 'ok',
@@ -11,9 +12,6 @@ let params = {
         dis: 2
     }
 };
-
-//let data = match.filter(params, {
-//});
 
 let data = 
     match

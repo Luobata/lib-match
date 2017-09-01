@@ -39,19 +39,22 @@ export const matchArray = function (
     let exp;
     let result = [];
 
-    if (arr.length === 1) {
-        // 直接映射 data
-        for (let i = 0; i < data.length; i++) {
-            result[i] = matchObject(data[i], arr[0]);
+    try {
+        if (arr.length === 1) {
+            // 直接映射 data
+                for (let i = 0; i < data.length; i++) {
+                    result[i] = matchObject(data[i], arr[0]);
+                }
         }
-    }
 
-    if (arr.length === 2) {
-        // 映射data的对象
-        data= data[arr[0]];
-        for (let i = 0; i < data.length; i++) {
-            result[i] = matchObject(data[i], arr[1]);
+        if (arr.length === 2) {
+            // 映射data的对象
+            data= data[arr[0]];
+            for (let i = 0; i < data.length; i++) {
+                result[i] = matchObject(data[i], arr[1]);
+            }
         }
+    } catch (e) {
     }
 
     return result;

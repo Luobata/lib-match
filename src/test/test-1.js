@@ -33,6 +33,23 @@ expect(data).to.be.eql({
         id: 100
     }
 });
+var params = {
+};
+var data = match.parse(params, {
+    title: '$${{abc}}',
+    data: {
+        id: '$${{name.id}}'
+    },
+    text: {
+        title: '$${{name.abc}}'
+    }
+});
+expect(data).to.be.eql({
+    data: {
+    },
+    text: {
+    }
+});
 
 // 匹配默认值
 var params = {
@@ -140,6 +157,22 @@ expect(data).to.be.eql([
         type: 'abc' 
     }
 ]);
+var params = null;
+var data = match.parse(params, [{
+    id: '$${{id}}',
+    title: 'string',
+    type: "$${{type}} || 'abc'"
+}]);
+expect(data).to.be.eql([]);
+
+var params = {
+};
+var data = match.parse(params, ['data', {
+    id: '$${{id}}',
+    title: 'string',
+    type: "$${{type}} || 'abc'"
+}]);
+expect(data).to.be.eql([]);
 
 var params = {
     data: [
@@ -209,6 +242,28 @@ expect(data).to.be.eql({
         }
     ]
 });
+
+var params = {
+    code: 200,
+    msg: 'ok',
+    data: null
+};
+var data = match.parse(params, {
+    code: '$${{code}}',
+    msg: '$${{msg}}',
+    data: ['data', {
+        id: '$${{id}}',
+        title: 'string',
+        type: "$${{type}} || 'abc'"
+    }]
+});
+expect(data).to.be.eql({
+    code: 200,
+    msg: 'ok',
+    data: [
+    ]
+});
+
 // 注册辅助函数或全局变量
 var params = {
     pid: 1,

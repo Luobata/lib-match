@@ -146,7 +146,7 @@ export const parseToData = function (
             return result;
         }
     } catch (e) {
-        console.log(e);
+        // console.log(e);
     }
 };
 
