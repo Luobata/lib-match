@@ -55,6 +55,7 @@ export const matchArray = function (
             }
         }
     } catch (e) {
+        if (config.filterDefaultArray) return;
     }
 
     return result;

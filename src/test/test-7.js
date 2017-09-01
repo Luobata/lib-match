@@ -38,3 +38,54 @@ expect(data).to.be.eql({
         province: 2
     }
 });
+
+params = null;
+data = match
+    .tmpConfig({
+        filterDefaultArray: true
+    })
+    .parse(params, [{
+        id: '$${{id}}',
+        title: 'string',
+        type: "$${{type}} || 'abc'"
+    }]);
+expect(data).to.be.eql();
+
+params = {
+};
+data = match
+    .tmpConfig({
+        filterDefaultArray: true
+    })
+    .parse(params, ['data', {
+        id: '$${{id}}',
+        title: 'string',
+        type: "$${{type}} || 'abc'"
+    }]);
+expect(data).to.be.eql();
+
+params = {
+    code: 200,
+    msg: 'ok',
+    data: null
+};
+data = match
+    .tmpConfig({
+        filterDefaultArray: true
+    })
+    .parse(params, {
+        code: '$${{code}}',
+        msg: '$${{msg}}',
+        array: '$${{array}} || []',
+        data: ['data', {
+            id: '$${{id}}',
+            title: 'string',
+            type: "$${{type}} || 'abc'"
+        }]
+    });
+
+expect(data).to.be.eql({
+    code: 200,
+    msg: 'ok',
+    array: []
+});
