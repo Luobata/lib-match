@@ -10,12 +10,11 @@ let config = {
     ignoreTokenKey: [] // 忽略解析的key
 };
 
-export default config;
+let tmpConfig = null;
 
 export const extendConfig = (
     obj: object
 ) => {
-
     if (!isObj(obj)) {
         console.log('error config type');
         return;
@@ -23,3 +22,20 @@ export const extendConfig = (
 
     Object.assign(config, obj);
 };
+
+export const extendTmpConfig = (
+    obj: object
+) => {
+    tmpConfig = Object.assign({}, config);
+    extendConfig(obj);
+};
+
+export const restoreConfig = () => {
+    if (!tmpConfig) return;
+
+    extendConfig(tmpConfig);
+
+    tmpConfig = null;
+};
+
+export default config;

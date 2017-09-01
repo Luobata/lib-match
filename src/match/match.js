@@ -7,7 +7,7 @@ import {
 import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
 import filter from 'MATCH/filter';
 import autoComplete from 'MATCH/auto-complete';
-import config , { extendConfig } from 'MATCH/config';
+import config , { extendConfig , extendTmpConfig , restoreConfig} from 'MATCH/config';
 
 
 /**
@@ -75,6 +75,8 @@ const match = {
 
         autoComplete(result, combineData);
 
+        restoreConfig();
+
         return result;
     },
     parseConfig (
@@ -91,7 +93,13 @@ const match = {
         extendConfig(configCache);
 
         return data;
+    },
+    tmpConfig (
+        configTmp: object
+    ) {
+        extendTmpConfig(configTmp);
 
+        return  this;
     },
     register: (
         obj: object | Array,
@@ -107,21 +115,27 @@ const match = {
         name: string
     ) => {
         updateStack(obj, name);
+        return this;
     },
     // 移除register的内容
     remove: (
         name: string
     ) => {
         removeStack(name);
+        return this;
     },
     removeAll: (
     ) => {
         cleanStack();
+
+        return this;
     },
     config: (
         obj: object
     ) => {
         extendConfig(obj);
+
+        return this;
     }
 };
 
