@@ -15,6 +15,10 @@ export const typeTrans = (
         return parseInt(data, 10);
     }
 
+    if (type === 'Int') {
+        return (isNaN(parseInt(data, 10)) ? 0 : parseInt(data, 10));
+    }
+
     if (type === 'float') {
         return parseFloat(data, 10);
     }

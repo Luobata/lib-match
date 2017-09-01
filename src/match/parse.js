@@ -33,7 +33,7 @@ export const parse = function (
     };
     const objTokenReg = /\$\$\{\{(.*)\}\}/;
     const arrTokenReg = /\$\{(.*)\}/;
-    const typeTokenReg = /\((boolean|Boolean|int|string|float)\)\$/;
+    const typeTokenReg = /\((boolean|Boolean|int|Int|string|float)\)\$/;
 
     if (isObj(str)) {
         // 递归映射

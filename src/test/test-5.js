@@ -32,6 +32,9 @@ data = match.parse([params], {
     Pid: '(Boolean)${0.pid}',
     name: '(Boolean)${0.name}',
     id: '(int)${0.id}',
+    id2: '(Int)${0.pid}',
+    id3: '(Int)${0.name}',
+    id4: '(Int)${0.district}',
     city: '(string)${0.city}',
     dis: '(float)${0.district}'
 });
@@ -40,6 +43,9 @@ expect(data).to.be.eql({
     Pid: true,
     name: true,
     id: 2,
+    id2: 0,
+    id3: 1,
+    id4: 1,
     city: '1',
     dis: 1.56
 });
