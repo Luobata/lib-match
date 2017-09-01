@@ -7,6 +7,7 @@ import {
     isObj,
     isStr,
     isArray,
+    isEmptyObj,
     typeCharge,
     objToArray,
     hasReg,
@@ -105,10 +106,9 @@ export const parseToData = function (
     data: object, // 映射的params数组
     that: object // 返回对象指针
 ) {
+    let result;
+
     try {
-        let result;
-
-
         if (exp['matchObject']) {
             result = matchObject(data, exp['matchObject']);
             return result;
@@ -131,7 +131,12 @@ export const parseToData = function (
 
         if (exp['matchParam']) {
             result = getData(data, exp['matchParam'], exp['matchType']);
-            result = result === undefined ? typeCharge(exp['default']) : result;
+            //if (config.filterDefaultObject && isEmptyObj(result)) {
+            //    debugger;
+            //}
+            //result = config.filterDefaultObject && isEmptyObj(result) ? undefined : result;
+            result = 
+                result === undefined ? typeCharge(exp['default']) : result;
             return result;
         }
 

@@ -5,7 +5,7 @@ import {
     isArray
 } from 'LIB/util';
 import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
-import filter from 'MATCH/filter';
+import { filter, filterEmpty } from 'MATCH/filter';
 import autoComplete from 'MATCH/auto-complete';
 import config , { extendConfig , extendTmpConfig , restoreConfig} from 'MATCH/config';
 
@@ -26,7 +26,7 @@ export const matchObject = function (
         filter(i, result);
     }
 
-    return result;
+    return filterEmpty(result);
 };
 
 /**

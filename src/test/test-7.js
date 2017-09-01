@@ -89,3 +89,73 @@ expect(data).to.be.eql({
     msg: 'ok',
     array: []
 });
+
+params = {
+    name: {
+        id: 1
+    }
+};
+data = match
+    .tmpConfig({
+        filterEmptyObject: true
+        //filterDefaultObject: true
+    })
+    .parse(params, {
+        title: '$${{abc}}',
+        data: {
+            id: '$${{name.id}}',
+            value: {
+                id: '$${{name.title}}'
+            }
+        },
+        text: {
+            title: '$${{name.abc}}'
+        }
+    });
+expect(data).to.be.eql({
+    data: {
+        id: 1
+    }
+});
+
+data = match
+    .tmpConfig({
+        filterEmptyObject: true
+        //filterDefaultObject: true
+    })
+    .parse(params, {
+        title: '$${{abc}}',
+        data: {
+            value: {
+                id: '$${{name.title}}'
+            }
+        },
+        text: {
+            title: '$${{name.abc}}'
+        }
+    });
+expect(data).to.be.eql(undefined);
+
+data = match
+    .tmpConfig({
+        filterDefaultObject: true
+    })
+    .parse(params, {
+        title: '$${{abc}}',
+        data: {
+            value: {
+                id: '$${{name.title}} || {}'
+            }
+        },
+        text: {
+            title: '$${{name.abc}}'
+        }
+    });
+console.log(data);
+//expect(data).to.be.eql({
+//    data: {
+//        value: {
+//            id: {}
+//        }
+//    }
+//});
