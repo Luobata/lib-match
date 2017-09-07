@@ -199,7 +199,37 @@ expect(data).to.be.eql([
     {
         id: 2,
         title: 'string',
-        type: 'abc' 
+        type: 'abc'
+    }
+]);
+var params = {
+    data: {
+        table: [
+            {
+                id: 1,
+                type: 2
+            },
+            {
+                id: 2
+            }
+        ]
+    }
+};
+var data = match.parse(params, ['data.table', {
+    id: '$${{id}}',
+    title: 'string',
+    type: "$${{type}} || 'abc'"
+}]);
+expect(data).to.be.eql([
+    {
+        id: 1,
+        title: 'string',
+        type: 2
+    },
+    {
+        id: 2,
+        title: 'string',
+        type: 'abc'
     }
 ]);
 

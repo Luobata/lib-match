@@ -1,4 +1,4 @@
-import { parse , parseToData } from 'MATCH/parse';
+import { parse, parseToData, getData } from 'MATCH/parse';
 import {
     isFun,
     isObj,
@@ -42,14 +42,15 @@ export const matchArray = function (
     try {
         if (arr.length === 1) {
             // 直接映射 data
-                for (let i = 0; i < data.length; i++) {
-                    result[i] = matchObject(data[i], arr[0]);
-                }
+            for (let i = 0; i < data.length; i++) {
+                result[i] = matchObject(data[i], arr[0]);
+            }
         }
 
         if (arr.length === 2) {
             // 映射data的对象
-            data= data[arr[0]];
+            data = getData(data, arr[0]);
+            // data = data[arr[0]];
             for (let i = 0; i < data.length; i++) {
                 result[i] = matchObject(data[i], arr[1]);
             }

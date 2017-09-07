@@ -162,7 +162,7 @@ const getParams = (str, obj) => {
     obj.title = createFun();
 };
 
-const getData = (
+export const getData = (
     data: object,
     exp: string, // 对应的对象字面量字符串 xx.xxx
     type: string // 对应的类型
