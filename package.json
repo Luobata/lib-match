@@ -1,10 +1,11 @@
 {
   "scripts": {
     "test": "webpack-dev-server --inline --hot --host 0.0.0.0",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "publish": "npm run build && npm publish"
   },
   "name": "lib-match",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "一个应用于前后端完全分离时代下的字段映射库",
   "main": "./dist/bundle.js",
   "dependencies": {

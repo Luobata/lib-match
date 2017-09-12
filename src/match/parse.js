@@ -151,6 +151,10 @@ export const parseToData = function (
             return result;
         }
     } catch (e) {
+        if (exp['default']) {
+            result = typeCharge(exp['default']);
+            return result;
+        }
         // console.log(e);
     }
 };
