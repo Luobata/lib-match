@@ -15,6 +15,12 @@ let config = {
 
 let tmpConfig = null;
 
+export let filterDefaultObject = false;
+
+export const changeFilterDefaultObject = (boo) => {
+    filterDefaultObject = boo;
+};
+
 export const extendConfig = (
     obj: object
 ) => {

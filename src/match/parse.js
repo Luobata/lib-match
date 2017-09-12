@@ -19,7 +19,7 @@ import {
     matchArray
 } from 'MATCH/match';
 
-import config from 'MATCH/config';
+import config, { changeFilterDefaultObject } from 'MATCH/config';
 
 import stack from 'MATCH/stack';
 
@@ -131,18 +131,18 @@ export const parseToData = function (
 
         if (exp['matchParam']) {
             result = getData(data, exp['matchParam'], exp['matchType']);
-            //if (config.filterDefaultObject && isEmptyObj(result)) {
-            //    debugger;
-            //}
-            //result = config.filterDefaultObject && isEmptyObj(result) ? undefined : result;
             result = 
-                result === undefined ? typeCharge(exp['default']) : result;
+                (result === undefined) ? typeCharge(exp['default']) : result;
+
+            // 记录此时的空对象是默认产生的 防止被filter过滤
+            if (isEmptyObj(result)) changeFilterDefaultObject(true);
             return result;
         }
 
         if(exp['matchArrParam']) {
             result = getArrData(data, exp['matchArrParam'], exp['matchType']);
-            result = result === undefined ? typeCharge(exp['default']) : result;
+            result = 
+                (result === undefined) ? typeCharge(exp['default']) : result;
             return result;
         }
 
@@ -153,7 +153,7 @@ export const parseToData = function (
     } catch (e) {
         if (exp['default']) {
             result = typeCharge(exp['default']);
-            return result;
+            return (config.filterDefaultObject && isEmptyObj(result)) ? undefined : result;
         }
         // console.log(e);
     }

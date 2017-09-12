@@ -7,7 +7,7 @@ import {
 import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
 import { filter, filterEmpty } from 'MATCH/filter';
 import autoComplete from 'MATCH/auto-complete';
-import config , { extendConfig , extendTmpConfig , restoreConfig} from 'MATCH/config';
+import config , { extendConfig , extendTmpConfig , restoreConfig, changeFilterDefaultObject , filterDefaultObject } from 'MATCH/config';
 
 
 /**
@@ -24,6 +24,7 @@ export const matchObject = function (
         exp = parse(obj[i], i);
         result[i] = parseToData(exp, data, result);
         filter(i, result);
+        changeFilterDefaultObject(false);
     }
 
     return filterEmpty(result);

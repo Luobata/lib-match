@@ -135,27 +135,3 @@ data = match
         }
     });
 expect(data).to.be.eql(undefined);
-
-data = match
-    .tmpConfig({
-        filterDefaultObject: true
-    })
-    .parse(params, {
-        title: '$${{abc}}',
-        data: {
-            value: {
-                id: '$${{name.title}} || {}'
-            }
-        },
-        text: {
-            title: '$${{name.abc}}'
-        }
-    });
-console.log(data);
-//expect(data).to.be.eql({
-//    data: {
-//        value: {
-//            id: {}
-//        }
-//    }
-//});

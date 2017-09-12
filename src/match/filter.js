@@ -1,7 +1,7 @@
 /**
  * @descprtion 过滤函数 过滤一些undefined等特殊情况
  */
-import config from 'MATCH/config';
+import config, { filterDefaultObject } from 'MATCH/config';
 import { isEmptyObj } from 'LIB/util';
 
 export const filter = (
@@ -24,8 +24,7 @@ export const filter = (
 export const filterEmpty = (
     result: object
 ) => {
-    if (config.filterEmptyObject) {
-        // debugger;
-    }
+    if (config.filterDefaultObject && !filterDefaultObject && isEmptyObj(result)) return undefined;
+
     return (config.filterEmptyObject && isEmptyObj(result)) ? undefined : result;
 };
