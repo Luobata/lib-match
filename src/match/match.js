@@ -8,6 +8,7 @@ import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
 import { filter, filterEmpty } from 'MATCH/filter';
 import autoComplete from 'MATCH/auto-complete';
 import config , { extendConfig , extendTmpConfig , restoreConfig, changeFilterDefaultObject , filterDefaultObject } from 'MATCH/config';
+import 'LIB/polyfill';
 
 
 /**
