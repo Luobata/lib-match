@@ -28,4 +28,4 @@ npm install lib-match --save-dev
 - 支持过滤、自动补全、关键词忽略的config配置
 
 ## Usage 使用方法 
-[API](https://github.com/Luobata/lib-match/wiki/API)
+[API](https://luobata.github.io/luobata-wiki/lib-match-wiki/match-parse.html)
