@@ -65,6 +65,7 @@ export const parse = function (
     }
 
     strArr = str.split('||');
+    // 方式错误
     for (i of strArr) {
         token = i.trim().match(typeTokenReg);
         if (hasReg(token)) {
@@ -86,12 +87,8 @@ export const parse = function (
         }
 
         if (!token) {
-            //if (i.indexOf('{{') !== -1) {
-            //    parseResult['defaultParam'] = 'return b';
-            //} else {
             parseResult['default'] = i.trim();
             continue;
-            //}
         }
     }
 
