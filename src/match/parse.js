@@ -116,7 +116,7 @@ export const parseToData = function (
             return result;
         }
 
-        if (exp['noMatch']) {
+        if (exp['noMatch'] !== undefined) {
             result = exp['noMatch'];
             return result;
         }
