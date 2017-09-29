@@ -56,7 +56,7 @@ export const parse = function (
 
     if (!isStr(str) ||
         isIgnore(key) ||
-        (!objTokenReg.test(str) && 
+        (!objTokenReg.test(str) &&
             !arrTokenReg.test(str))
     ) {
         // 不是字符串 直接返回
@@ -64,17 +64,21 @@ export const parse = function (
         return parseResult;
     }
 
+    // 这里处理的一定是字符串
     strArr = str.split('||');
-    // 方式错误
+    // 方式错误 正则分隔
+    // re = /(?:(.*?)(\|\|))|(.*)/ig
     for (i of strArr) {
         token = i.trim().match(typeTokenReg);
         if (hasReg(token)) {
+            // 类型
             parseResult['matchType'] = token[1];
         }
 
         token = i.trim().match(objTokenReg);
 
         if (token && token.length && token.length >= 1) {
+            // 映射字段
             parseResult['matchParam'] = token[1];
             continue;
         }
@@ -82,11 +86,13 @@ export const parse = function (
         token = i.trim().match(arrTokenReg);
 
         if (token && token.length && token.length >= 1) {
+            // 映射数组
             parseResult['matchArrParam'] = token[1];
             continue;
         }
 
         if (!token) {
+            // 如果上面三个都没有匹配上 自认为是默认值
             parseResult['default'] = i.trim();
             continue;
         }
@@ -128,7 +134,7 @@ export const parseToData = function (
 
         if (exp['matchParam']) {
             result = getData(data, exp['matchParam'], exp['matchType']);
-            result = 
+            result =
                 (result === undefined) ? typeCharge(exp['default']) : result;
 
             // 记录此时的空对象是默认产生的 防止被filter过滤
