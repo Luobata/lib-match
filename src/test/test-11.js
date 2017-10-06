@@ -10,9 +10,13 @@ let data = match
     .parse(params, {
         id: '$${{ids}} || 123',
         city: '$${{c}} || $${{city}} || 1',
-        city2: '$${{province}} || 4'
+        city2: '$${{province}} || 4',
+        city3: '$${{c2}} || $${{city}} || 1',
     });
 
-console.log(data);
-//expect(data).to.be.eql({
-//});
+expect(data).to.be.eql({
+    id: 123,
+    city: 1,
+    city2: 4,
+    city3: 2
+});
