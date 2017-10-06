@@ -11,6 +11,7 @@ import {
     typeCharge,
     objToArray,
     hasReg,
+    addArr,
     typeTrans
 } from 'LIB/util';
 
@@ -35,6 +36,10 @@ export const parse = function (
     const objTokenReg = /\$\$\{\{(.*)\}\}/;
     const arrTokenReg = /\$\{(.*)\}/;
     const typeTokenReg = /\((boolean|Boolean|int|Int|string|float)\)\$/;
+    const strTokenReg = /(?:(.*?)(\|\|))|(.+)/ig;
+    // 隐藏token
+    //const strTokenReg = /(?:(.*?)(\|\|(?:\||)|(?:&&)))|(.+)/ig
+
 
     if (isObj(str)) {
         // 递归映射
@@ -63,6 +68,56 @@ export const parse = function (
         parseResult['noMatch'] = str;
         return parseResult;
     }
+
+    let re = strTokenReg.exec(str);
+    while (re) {
+        let spr = re[2];
+        let tok = re[1] === undefined ? re[0] : re[1];
+        let result = {};
+        const end = () => {
+            parseResult['matchStr'] = addArr(parseResult['matchStr'], result);
+            re = strTokenReg.exec(str);
+        };
+
+        if (spr) {
+            result['spr'] = spr.trim();
+        }
+
+        token = tok.trim().match(typeTokenReg);
+
+        if (hasReg(token)) {
+            // 类型
+            result['matchType'] = token[1];
+        }
+
+        token = tok.trim().match(objTokenReg);
+
+        if (token && token.length && token.length >= 1) {
+            // 映射字段
+            result['matchParam'] = token[1];
+            end();
+            continue;
+        }
+
+        token = tok.trim().match(arrTokenReg);
+
+        if (token && token.length && token.length >= 1) {
+            // 映射数组
+            result['matchArrParam'] = token[1];
+            end();
+            continue;
+        }
+
+        if (!token) {
+            // 如果上面三个都没有匹配上 自认为是默认值
+            result['default'] = tok.trim();
+            end();
+            continue;
+        }
+    }
+            console.log(parseResult['matchStr']);
+
+    return parseResult;
 
     // 这里处理的一定是字符串
     strArr = str.split('||');
@@ -101,66 +156,6 @@ export const parse = function (
     return parseResult;
 };
 
-/**
- * @description 把exp解析的内容反装回真是值
- */
-export const parseToData = function (
-    exp: object, // parse 返回值
-    data: object, // 映射的params数组
-    that: object // 返回对象指针
-) {
-    let result;
-
-    try {
-        if (exp['matchObject']) {
-            result = matchObject(data, exp['matchObject']);
-            return result;
-        }
-
-        if (exp['matchArray']) {
-            result = matchArray(data, exp['matchArray']);
-            return result;
-        }
-
-        if (exp['noMatch'] !== undefined) {
-            result = exp['noMatch'];
-            return result;
-        }
-
-        //if (exp['defaultParam']) {
-        //    result = getData(data, exp['matchParam']) || getParams(exp['defaultParam'], obj);
-        //    return result;
-        //}
-
-        if (exp['matchParam']) {
-            result = getData(data, exp['matchParam'], exp['matchType']);
-            result =
-                (result === undefined) ? typeCharge(exp['default']) : result;
-
-            // 记录此时的空对象是默认产生的 防止被filter过滤
-            if (isEmptyObj(result)) changeFilterDefaultObject(true);
-            return result;
-        }
-
-        if(exp['matchArrParam']) {
-            result = getArrData(data, exp['matchArrParam'], exp['matchType']);
-            result = 
-                (result === undefined) ? typeCharge(exp['default']) : result;
-            return result;
-        }
-
-        if (exp['matchFun']) {
-            result = exp['matchFun'].apply(that, [data].concat(objToArray(stack, 'value')));
-            return result;
-        }
-    } catch (e) {
-        if (exp['default']) {
-            result = typeCharge(exp['default']);
-            return (config.filterDefaultObject && isEmptyObj(result)) ? undefined : result;
-        }
-        // console.log(e);
-    }
-};
 
 const getParams = (str, obj) => {
     let createFun = function () {
@@ -184,7 +179,7 @@ export const getData = (
     return type ? typeTrans(par, type) : par;
 };
 
-const getArrData = (
+export const getArrData = (
     data: object,
     exp: string, // 对应的数组序号字符串字面量
     type: string // 对应的类型

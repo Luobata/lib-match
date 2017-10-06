@@ -1,4 +1,5 @@
-import { parse, parseToData, getData } from 'MATCH/parse';
+import { parse, getData } from 'MATCH/parse';
+import { parseToData } from 'MATCH/parse-data';
 import {
     isFun,
     isObj,

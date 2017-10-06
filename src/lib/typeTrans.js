@@ -43,7 +43,7 @@ export const typeCharge = (
         // 若果是以''包住 或者""包住
         if (stringReg.test(str)) {
             // 返回字符串
-            str = str.match(stringReg).pop(); 
+            str = str.match(stringReg).pop();
             return str;
         }
 
@@ -79,4 +79,13 @@ export const objToArray = (
     } catch (e) {
         return [];
     };
+};
+
+export const addArr = (arr, i) => {
+    if (arr && arr.length) {
+        arr.push(i);
+        return arr;
+    } else {
+        return [i];
+    }
 };
