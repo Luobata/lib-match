@@ -115,7 +115,6 @@ export const parse = function (
             continue;
         }
     }
-            console.log(parseResult['matchStr']);
 
     return parseResult;
 

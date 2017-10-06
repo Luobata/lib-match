@@ -23,6 +23,7 @@ import {
     matchArray
 } from 'MATCH/match';
 import stack from 'MATCH/stack';
+import config, { changeFilterDefaultObject } from 'MATCH/config';
 
 export const parseToData = function (
     exp: object, // parse 返回值
@@ -75,9 +76,12 @@ export const parseToData = function (
         }
 
     } catch (e) {
-        if (exp['default']) {
-            result = typeCharge(exp['default']);
-            return (config.filterDefaultObject && isEmptyObj(result)) ? undefined : result;
+        if (exp['matchStr']) {
+            let def = exp['matchStr'].pop();
+            if (def['default']) {
+                result = typeCharge(def['default']);
+                return (config.filterDefaultObject && isEmptyObj(result)) ? undefined : result;
+            }
         }
         // console.log(e);
     }
