@@ -3,6 +3,7 @@ import { parseToData } from 'MATCH/parse-data';
 import {
     isFun,
     isObj,
+    isStr,
     isArray
 } from 'LIB/util';
 import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
@@ -17,16 +18,20 @@ import 'LIB/polyfill';
  */
 export const matchObject = function (
     data: any,
-    obj: object
+    obj: object | String
 ) {
     let exp;
     let result = {};
 
-    for (let i in obj) {
-        exp = parse(obj[i], i);
-        result[i] = parseToData(exp, data, result);
-        filter(i, result);
-        changeFilterDefaultObject(false);
+    if (isStr(obj)) {
+        console.log(obj);
+    } else {
+        for (let i in obj) {
+            exp = parse(obj[i], i);
+            result[i] = parseToData(exp, data, result);
+            filter(i, result);
+            changeFilterDefaultObject(false);
+        }
     }
 
     return filterEmpty(result);
