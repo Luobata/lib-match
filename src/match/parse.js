@@ -37,9 +37,9 @@ export const parse = function (
     const objTokenReg = /\$\$\{\{(.*)\}\}/;
     const arrTokenReg = /\$\{(.*)\}/;
     const typeTokenReg = /\((boolean|Boolean|int|Int|string|float)\)\$/;
-    const strTokenReg = /(?:(.*?)(\|\|))|(.+)/ig;
+    //const strTokenReg = /(?:(.*?)(\|\|))|(.+)/ig;
     // 隐藏token
-    //const strTokenReg = /(?:(.*?)(\|\|(?:\||)|(?:&&)))|(.+)/ig
+    const strTokenReg = /(?:(.*?)(\|\|(?:\||)|(?:&&)))|(.+)/ig
 
     if (empty(key)) {
         parseResult['matchArrayKey'] = str;

@@ -125,7 +125,7 @@ const splStr = (
             i++;
             switch (item.spr) {
                 case '||':
-                    result = 
+                    result =
                         (result === undefined) ? datas(i) : result;
                 break;
                 case '|||':

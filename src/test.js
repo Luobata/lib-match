@@ -5,7 +5,6 @@
 //console.log(m);
 //console.log(m2);
 
-import 'TEST/test-12';
 //import 'TEST/test-tmp';
 import 'TEST/test-1';
 import 'TEST/test-2';
@@ -18,3 +17,4 @@ import 'TEST/test-8';
 import 'TEST/test-9';
 import 'TEST/test-10';
 import 'TEST/test-11';
+import 'TEST/test-12';
