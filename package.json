@@ -5,7 +5,7 @@
     "update": "npm run build && npm publish"
   },
   "name": "lib-match",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "一个应用于前后端完全分离时代下的字段映射库",
   "main": "./dist/match.js",
   "dependencies": {
