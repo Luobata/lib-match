@@ -19,7 +19,7 @@ var prodWebpackConfig = {
         path: assetsRoot,
         library: 'match',
         libraryTarget: 'umd',
-        filename: "bundle.js"
+        filename: "match.js"
     },
     plugins: [
         new webpack.DefinePlugin({

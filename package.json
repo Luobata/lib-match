@@ -5,9 +5,9 @@
     "update": "npm run build && npm publish"
   },
   "name": "lib-match",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "一个应用于前后端完全分离时代下的字段映射库",
-  "main": "./dist/bundle.js",
+  "main": "./dist/match.js",
   "dependencies": {
     "ora": "0.3.0",
     "shelljs": "0.7.5",
@@ -23,6 +23,7 @@
     "webpack-merge": "^0.14.1"
   },
   "devDependencies": {
+    "babel-preset-es2015-loose": "^8.0.0",
     "chai": "^4.1.1",
     "mocha": "^3.5.0"
   },
