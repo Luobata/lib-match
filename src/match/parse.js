@@ -8,11 +8,12 @@ import {
     isStr,
     isArray,
     isEmptyObj,
+    empty,
     typeCharge,
     objToArray,
     hasReg,
     addArr,
-    typeTrans
+    typeTrans,
 } from 'LIB/util';
 
 import {
@@ -40,6 +41,10 @@ export const parse = function (
     // 隐藏token
     //const strTokenReg = /(?:(.*?)(\|\|(?:\||)|(?:&&)))|(.+)/ig
 
+    if (empty(key)) {
+        parseResult['matchArrayKey'] = str;
+        return parseResult;
+    }
 
     if (isObj(str)) {
         // 递归映射

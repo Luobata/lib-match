@@ -25,3 +25,11 @@ let data = match
     ]);
 
 console.log(data);
+
+data = match
+    .parse(params, {
+        code: '$${{code}}',
+        msg: '$${{msg}}',
+        data: ['data', 'id'],
+    });
+console.log(data);

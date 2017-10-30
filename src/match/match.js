@@ -24,7 +24,8 @@ export const matchObject = function (
     let result = {};
 
     if (isStr(obj)) {
-        console.log(obj);
+        exp = parse(obj);
+        result = parseToData(exp, data);
     } else {
         for (let i in obj) {
             exp = parse(obj[i], i);

@@ -21,3 +21,5 @@ export const isNum = (num) => {
 export const isEmptyObj = (obj) => {
     return JSON.stringify(obj) === '{}';
 };
+
+export const empty = (obj) => (obj === undefined);

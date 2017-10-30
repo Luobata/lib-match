@@ -33,6 +33,11 @@ export const parseToData = function (
     let result;
 
     try {
+        if (exp['matchArrayKey']) {
+            result = data[exp['matchArrayKey']];
+            return result;
+        }
+
         if (exp['matchObject']) {
             result = matchObject(data, exp['matchObject']);
             return result;
