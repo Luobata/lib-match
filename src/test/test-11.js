@@ -12,11 +12,13 @@ let data = match
         city: '$${{c}} || $${{city}} || 1',
         city2: '$${{province}} || 4',
         city3: '$${{c2}} || $${{city}} || 1',
+        //city4: '$${{id}} ||| 1',
     });
 
 expect(data).to.be.eql({
     id: 123,
     city: 1,
     city2: 4,
-    city3: 2
+    city3: 2,
+    //city4: 1,
 });

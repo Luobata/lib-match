@@ -24,7 +24,7 @@ let data = match
         'data', 'id'
     ]);
 
-console.log(data);
+expect(data).to.be.eql([1, 2]);
 
 data = match
     .parse(params, {
@@ -32,4 +32,8 @@ data = match
         msg: '$${{msg}}',
         data: ['data', 'id'],
     });
-console.log(data);
+expect(data).to.be.eql({
+    code: 200,
+    msg: 'ok',
+    data: [1, 2]
+});
