@@ -71,8 +71,9 @@ export const objToArray = (
 ) => {
     try {
         let arr = [];
-        for (let i of data) {
-            arr = arr.concat(i[key]);
+        for (let i = 0 ;i < data.length; i++) {
+        //for (let i of data) {
+            arr = arr.concat(data[i][key]);
         }
 
         return arr;

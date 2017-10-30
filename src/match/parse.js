@@ -68,7 +68,9 @@ export const parse = function (
     strArr = str.split('||');
     // 方式错误 正则分隔
     // re = /(?:(.*?)(\|\|))|(.*)/ig
-    for (i of strArr) {
+    //for (i of strArr) {
+    for (let j = 0; j < strArr.length; j++) {
+        let i = strArr[j];
         token = i.trim().match(typeTokenReg);
         if (hasReg(token)) {
             // 类型
@@ -177,8 +179,9 @@ export const getData = (
     let par = data;
     let token = exp.split('.');
     // 递归获取
-    for (let i of token) {
-        par = par[i];
+    for (let i = 0; i < token.length; i++) {
+    //for (let i of token) {
+        par = par[token[i]];
     }
 
     return type ? typeTrans(par, type) : par;
