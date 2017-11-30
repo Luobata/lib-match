@@ -1,24 +1,23 @@
 import { parse, getData } from 'MATCH/parse';
-import { parseToData } from 'MATCH/parse-data';
+import parseToData from 'MATCH/parse-data';
 import {
-    isFun,
     isObj,
     isStr,
-    isArray
+    isArray,
 } from 'LIB/util';
 import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
 import { filter, filterEmpty } from 'MATCH/filter';
 import autoComplete from 'MATCH/auto-complete';
-import config , { extendConfig , extendTmpConfig , restoreConfig, changeFilterDefaultObject , filterDefaultObject } from 'MATCH/config';
+import config, { extendConfig, extendTmpConfig, restoreConfig, changeFilterDefaultObject } from 'MATCH/config';
 import 'LIB/polyfill';
 
 
 /**
  * 对象映射
  */
-export const matchObject = function (
+export const matchObject = function matchObject(
     data: any,
-    obj: object | String
+    obj: Object | String,
 ) {
     let exp;
     let result = {};
@@ -27,7 +26,7 @@ export const matchObject = function (
         exp = parse(obj);
         result = parseToData(exp, data);
     } else {
-        for (let i in obj) {
+        for (const i in obj) {
             exp = parse(obj[i], i);
             result[i] = parseToData(exp, data, result);
             filter(i, result);
@@ -41,12 +40,11 @@ export const matchObject = function (
 /**
  * 数组映射
  */
-export const matchArray = function (
+export const matchArray = function matchArray(
     data: any,
-    arr: Array
+    arr: Array,
 ) {
-    let exp;
-    let result = [];
+    const result = [];
 
     try {
         if (arr.length === 1) {
@@ -65,7 +63,7 @@ export const matchArray = function (
             }
         }
     } catch (e) {
-        if (config.filterDefaultArray) return;
+        if (config.filterDefaultArray) return undefined;
     }
 
     return result;
@@ -73,10 +71,9 @@ export const matchArray = function (
 
 const match = {
     parse: (
-        combineData: object | Array,
-        keyData: object | Array
+        combineData: Object | Array,
+        keyData: Object | Array,
     ) => {
-        let matchData = {};
         let result;
 
         if (isObj(keyData)) {
@@ -93,64 +90,56 @@ const match = {
 
         return result;
     },
-    parseConfig (
-        combineData: object | Array,
-        keyData: object | Array,
-        configTmp: object
+    parseConfig(
+        combineData: Object | Array,
+        keyData: Object | Array,
+        configTmp: Object,
     ) {
         // 代表此次match使用传入的config
         const configCache = Object.assign({}, config);
-        let data;
 
         extendConfig(configTmp);
-        data = this.parse(combineData, keyData);
+        const data = this.parse(combineData, keyData);
         extendConfig(configCache);
 
         return data;
     },
-    tmpConfig (
-        configTmp: object
-    ) {
+    tmpConfig(configTmp: Object) {
         extendTmpConfig(configTmp);
 
-        return  this;
+        return this;
     },
     register: (
-        obj: object | Array,
-        name: string
+        obj: Object | Array,
+        name: string,
     ) => {
         pushStack({
             value: obj,
-            name: name
+            name,
         });
     },
     update: (
-        obj: object | Array,
-        name: string
+        obj: Object | Array,
+        name: string,
     ) => {
         updateStack(obj, name);
         return this;
     },
     // 移除register的内容
-    remove: (
-        name: string
-    ) => {
+    remove: (name: string) => {
         removeStack(name);
         return this;
     },
-    removeAll: (
-    ) => {
+    removeAll: () => {
         cleanStack();
 
         return this;
     },
-    config: (
-        obj: object
-    ) => {
+    config: (obj: Object) => {
         extendConfig(obj);
 
         return this;
-    }
+    },
 };
 
 export default match;

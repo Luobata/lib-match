@@ -5,13 +5,12 @@ import config from 'MATCH/config';
 import { isObj } from 'LIB/util';
 
 const autoComplete = (
-    result: object,
-    data: object
+    result: Object,
+    data: Object,
 ) => {
-
     if (!config.autoComplete) return;
 
-    for (let i in data) {
+    for (const i in data) {
         if (!result.hasOwnProperty(i)) {
             result[i] = data[i];
         } else if (isObj(result[i]) && isObj(data[i])) {

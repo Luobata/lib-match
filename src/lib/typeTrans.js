@@ -1,10 +1,12 @@
+const isNaN = Number.isNaN;
+
 export const typeTrans = (
     data: any,
-    type: string
+    type: string,
 ) => {
     // 字符串对应的 false 转化为false true 转化为true
     if (type === 'boolean') {
-        return data.toLowerCase() === 'false' ? false : true;
+        return data.toLowerCase() !== 'false';
     }
 
     if (type === 'Boolean') {
@@ -26,14 +28,14 @@ export const typeTrans = (
     if (type === 'string') {
         return data.toString();
     }
+
+    return true;
 };
 
 /**
  * @description 类型转换
- **/
-export const typeCharge = (
-    str: string
-) => {
+ * */
+export const typeCharge = (str: string) => {
     try {
         str = str.trim();
         const stringReg = /^(['"])(.*)\1$/;
@@ -56,8 +58,10 @@ export const typeCharge = (
         }
 
         // 说明不是字符串类型的值
-        let num = parseFloat(str);
-        let boo = str === 'false' ? false : (str === 'true' ? true: '');
+        const num = parseFloat(str);
+        /* eslint-disable no-nested-ternary */
+        const boo = str === 'false' ? false : (str === 'true' ? true : '');
+        /* eslint-disable no-nested-ternary */
         str = num || boo !== '' ? num || boo : str;
         return str;
     } catch (e) {
@@ -67,26 +71,25 @@ export const typeCharge = (
 
 export const objToArray = (
     data: Array, // 转换的对象数组
-    key: string // 转化你的值
+    key: string, // 转化你的值
 ) => {
     try {
         let arr = [];
-        for (let i = 0 ;i < data.length; i++) {
-        //for (let i of data) {
+        for (let i = 0; i < data.length; i++) {
+        // for (let i of data) {
             arr = arr.concat(data[i][key]);
         }
 
         return arr;
     } catch (e) {
         return [];
-    };
+    }
 };
 
 export const addArr = (arr, i) => {
     if (arr && arr.length) {
         arr.push(i);
         return arr;
-    } else {
-        return [i];
     }
+    return [i];
 };

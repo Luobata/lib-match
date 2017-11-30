@@ -6,7 +6,7 @@ import { isEmptyObj } from 'LIB/util';
 
 export const filter = (
     key: string,
-    result: object
+    result: Object,
 ) => {
     if (config.filterUndefined && result[key] === undefined) {
         delete result[key];
@@ -21,9 +21,7 @@ export const filter = (
     }
 };
 
-export const filterEmpty = (
-    result: object
-) => {
+export const filterEmpty = (result: Object) => {
     if (config.filterDefaultObject && !filterDefaultObject && isEmptyObj(result)) return undefined;
 
     return (config.filterEmptyObject && isEmptyObj(result)) ? undefined : result;

@@ -13,8 +13,13 @@
   "plugins": [
     "react"
   ],
+  "settings": {
+      "import/resolver": {
+          "webpack": "build/webpack.config.js"
+      }
+  },
   "rules": {
-    //"extensions": "always",
+    "extensions": "always",
     "no-continue": "off",
     "indent": ["error", 4],
     "global-require": "off",
