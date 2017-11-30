@@ -1,7 +1,7 @@
 /**
  * @description 把exp解析的内容反装回真是值
  */
-import { 
+import {
     getData,
     getArrData
 } from 'MATCH/parse';
