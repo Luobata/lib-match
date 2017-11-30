@@ -98,14 +98,18 @@ export const parse = function parse(
     }
 
     let re = strTokenReg.exec(str);
+    const end = (result) => {
+        parseResult.matchStr = addArr(parseResult.matchStr, result);
+        return strTokenReg.exec(str);
+    };
     while (re) {
         const spr = re[2];
         const tok = re[1] === undefined ? re[0] : re[1];
         const result = {};
-        const end = () => {
-            parseResult.matchStr = addArr(parseResult.matchStr, result);
-            re = strTokenReg.exec(str);
-        };
+        // const end = () => {
+        //    parseResult.matchStr = addArr(parseResult.matchStr, result);
+        //    re = strTokenReg.exec(str);
+        // };
 
         if (spr) {
             result.spr = spr.trim();
@@ -123,7 +127,7 @@ export const parse = function parse(
         if (token && token.length && token.length >= 1) {
             // 映射字段
             result.matchParam = token[1];
-            end();
+            re = end(result);
             continue;
         }
 
@@ -132,14 +136,14 @@ export const parse = function parse(
         if (token && token.length && token.length >= 1) {
             // 映射数组
             result.matchArrParam = token[1];
-            end();
+            re = end(result);
             continue;
         }
 
         if (!token) {
             // 如果上面三个都没有匹配上 自认为是默认值
             result.default = tok.trim();
-            end();
+            re = end(result);
             continue;
         }
     }

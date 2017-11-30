@@ -4,6 +4,7 @@ import {
     isObj,
     isStr,
     isArray,
+    has,
 } from 'LIB/util';
 import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
 import { filter, filterEmpty } from 'MATCH/filter';
@@ -27,6 +28,7 @@ export const matchObject = function matchObject(
         result = parseToData(exp, data);
     } else {
         for (const i in obj) {
+            if (!has(obj, i)) continue;
             exp = parse(obj[i], i);
             result[i] = parseToData(exp, data, result);
             filter(i, result);

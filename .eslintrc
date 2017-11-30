@@ -36,6 +36,8 @@
     "no-restricted-syntax": "off",
     "no-plusplus": "off",
     "no-mixed-operators": "off",
-    "prefer-destructuring": "off"
+    "prefer-destructuring": "off",
+    "import/no-named-as-default-member": "off",
+    "import/no-mutable-exports": "off"
   }
 }
