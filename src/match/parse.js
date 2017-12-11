@@ -24,11 +24,10 @@ export const getData = (
     const token = exp.split('.');
     // 递归获取
     for (let i = 0; i < token.length; i++) {
-    // for (let i of token) {
         par = par[token[i]];
     }
 
-    return type ? typeTrans(par, type) : par;
+    return (type && par !== undefined) ? typeTrans(par, type) : par;
 };
 
 export const getArrData = (
@@ -106,10 +105,6 @@ export const parse = function parse(
         const spr = re[2];
         const tok = re[1] === undefined ? re[0] : re[1];
         const result = {};
-        // const end = () => {
-        //    parseResult.matchStr = addArr(parseResult.matchStr, result);
-        //    re = strTokenReg.exec(str);
-        // };
 
         if (spr) {
             result.spr = spr.trim();
