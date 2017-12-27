@@ -12,7 +12,7 @@ module.exports = {
         },
         noInfo: true,
         path: __dirname + "/",
-        filename: "bundle.js"
+        filename: "match.js"
     },
     resolve: {
         alias: {

@@ -1,0 +1,43 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true
+  },
+  "globals": {
+    "Babel": true,
+    "React": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "settings": {
+      "import/resolver": {
+          "webpack": "build/webpack.config.js"
+      }
+  },
+  "rules": {
+    "extensions": "always",
+    "no-continue": "off",
+    "indent": ["error", 4],
+    "global-require": "off",
+    "import/no-unresolved": "off",
+    "no-underscore-dangle": "off",
+    "no-new-func": "off",
+    "no-param-reassign": "off",
+    "react/prefer-stateless-function": "off",
+    "react/no-multi-comp": "off",
+    "react/jsx-no-bind": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-first-prop-new-line": "off",
+    "react/jsx-filename-extension": "off",
+    "no-restricted-syntax": "off",
+    "no-plusplus": "off",
+    "no-mixed-operators": "off",
+    "prefer-destructuring": "off",
+    "import/no-named-as-default-member": "off",
+    "import/no-mutable-exports": "off"
+  }
+}

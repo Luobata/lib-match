@@ -7,194 +7,141 @@ import {
     isObj,
     isStr,
     isArray,
-    isEmptyObj,
-    typeCharge,
-    objToArray,
+    empty,
     hasReg,
-    typeTrans
+    addArr,
+    typeTrans,
 } from 'LIB/util';
 
-import {
-    matchObject,
-    matchArray
-} from 'MATCH/match';
-
-import config, { changeFilterDefaultObject } from 'MATCH/config';
-
-import stack from 'MATCH/stack';
-
-export const parse = function (
-    str: any,
-    key: any
-) {
-    let strArr;
-    let i;
-    let token;
-    let parseResult = {
-    };
-    const objTokenReg = /\$\$\{\{(.*)\}\}/;
-    const arrTokenReg = /\$\{(.*)\}/;
-    const typeTokenReg = /\((boolean|Boolean|int|Int|string|float)\)\$/;
-
-    if (isObj(str)) {
-        // 递归映射
-        parseResult['matchObject'] = str;
-        return parseResult;
-    }
-
-    if (isArray(str)) {
-        // 数组递归映射
-        parseResult['matchArray'] = str;
-        return parseResult;
-    }
-
-    if (isFun(str)) {
-        // 执行函数
-        parseResult['matchFun'] = str;
-        return parseResult;
-    }
-
-    if (!isStr(str) ||
-        isIgnore(key) ||
-        (!objTokenReg.test(str) && 
-            !arrTokenReg.test(str))
-    ) {
-        // 不是字符串 直接返回
-        parseResult['noMatch'] = str;
-        return parseResult;
-    }
-
-    strArr = str.split('||');
-    // 方式错误
-    for (i of strArr) {
-        token = i.trim().match(typeTokenReg);
-        if (hasReg(token)) {
-            parseResult['matchType'] = token[1];
-        }
-
-        token = i.trim().match(objTokenReg);
-
-        if (token && token.length && token.length >= 1) {
-            parseResult['matchParam'] = token[1];
-            continue;
-        }
-
-        token = i.trim().match(arrTokenReg);
-
-        if (token && token.length && token.length >= 1) {
-            parseResult['matchArrParam'] = token[1];
-            continue;
-        }
-
-        if (!token) {
-            parseResult['default'] = i.trim();
-            continue;
-        }
-    }
-
-    return parseResult;
-};
-
-/**
- * @description 把exp解析的内容反装回真是值
- */
-export const parseToData = function (
-    exp: object, // parse 返回值
-    data: object, // 映射的params数组
-    that: object // 返回对象指针
-) {
-    let result;
-
-    try {
-        if (exp['matchObject']) {
-            result = matchObject(data, exp['matchObject']);
-            return result;
-        }
-
-        if (exp['matchArray']) {
-            result = matchArray(data, exp['matchArray']);
-            return result;
-        }
-
-        if (exp['noMatch'] !== undefined) {
-            result = exp['noMatch'];
-            return result;
-        }
-
-        //if (exp['defaultParam']) {
-        //    result = getData(data, exp['matchParam']) || getParams(exp['defaultParam'], obj);
-        //    return result;
-        //}
-
-        if (exp['matchParam']) {
-            result = getData(data, exp['matchParam'], exp['matchType']);
-            result = 
-                (result === undefined) ? typeCharge(exp['default']) : result;
-
-            // 记录此时的空对象是默认产生的 防止被filter过滤
-            if (isEmptyObj(result)) changeFilterDefaultObject(true);
-            return result;
-        }
-
-        if(exp['matchArrParam']) {
-            result = getArrData(data, exp['matchArrParam'], exp['matchType']);
-            result = 
-                (result === undefined) ? typeCharge(exp['default']) : result;
-            return result;
-        }
-
-        if (exp['matchFun']) {
-            result = exp['matchFun'].apply(that, [data].concat(objToArray(stack, 'value')));
-            return result;
-        }
-    } catch (e) {
-        if (exp['default']) {
-            result = typeCharge(exp['default']);
-            return (config.filterDefaultObject && isEmptyObj(result)) ? undefined : result;
-        }
-        // console.log(e);
-    }
-};
-
-const getParams = (str, obj) => {
-    let createFun = function () {
-        return new Function (str);
-    }
-    obj.title = createFun();
-};
+import config from 'MATCH/config';
 
 export const getData = (
-    data: object,
+    data: Object,
     exp: string, // 对应的对象字面量字符串 xx.xxx
-    type: string // 对应的类型
+    type: string, // 对应的类型
 ) => {
     let par = data;
-    let token = exp.split('.');
+    const token = exp.split('.');
     // 递归获取
-    for (let i of token) {
-        par = par[i];
+    for (let i = 0; i < token.length; i++) {
+        par = par[token[i]];
     }
 
-    return type ? typeTrans(par, type) : par;
+    return (type && par !== undefined) ? typeTrans(par, type) : par;
 };
 
-const getArrData = (
-    data: object,
+export const getArrData = (
+    data: Object,
     exp: string, // 对应的数组序号字符串字面量
-    type: string // 对应的类型
+    type: string, // 对应的类型
 ) => {
-    let token = exp.split('.');
-    let index = parseInt(token.shift(), 10);
+    const token = exp.split('.');
+    const index = parseInt(token.shift(), 10);
     if (!isNum(index) || data[index] === undefined) {
-        console.log('error: the Array index is not exist!');
+        /* eslint-disable no-console */
+        console.error('error: the Array index is not exist!');
+        /* eslint-disable no-console */
         return undefined;
     }
 
     return getData(data[index], token.join('.'), type);
 };
 
-const isIgnore = (
-    key: string
-) => {
-    return config.ignoreTokenKey.indexOf(key) !== -1;
+const isIgnore = (key: string) => config.ignoreTokenKey.indexOf(key) !== -1;
+
+export const parse = function parse(
+    str: any,
+    key: any,
+) {
+    let token;
+    const parseResult = {
+    };
+    const objTokenReg = /\$\$\{\{(.*)\}\}/;
+    const arrTokenReg = /\$\{(.*)\}/;
+    const typeTokenReg = /\((boolean|Boolean|int|Int|string|float)\)\$/;
+    // const strTokenReg = /(?:(.*?)(\|\|))|(.+)/ig;
+    // 隐藏token
+    const strTokenReg = /(?:(.*?)(\|\|(?:\||)|(?:&&)))|(.+)/ig;
+
+    if (empty(key)) {
+        parseResult.matchArrayKey = str;
+        return parseResult;
+    }
+
+    if (isObj(str)) {
+        // 递归映射
+        parseResult.matchObject = str;
+        return parseResult;
+    }
+
+    if (isArray(str)) {
+        // 数组递归映射
+        parseResult.matchArray = str;
+        return parseResult;
+    }
+
+    if (isFun(str)) {
+        // 执行函数
+        parseResult.matchFun = str;
+        return parseResult;
+    }
+
+    if (!isStr(str) ||
+        isIgnore(key) ||
+        (!objTokenReg.test(str) &&
+            !arrTokenReg.test(str))
+    ) {
+        // 不是字符串 直接返回
+        parseResult.noMatch = str;
+        return parseResult;
+    }
+
+    let re = strTokenReg.exec(str);
+    const end = (result) => {
+        parseResult.matchStr = addArr(parseResult.matchStr, result);
+        return strTokenReg.exec(str);
+    };
+    while (re) {
+        const spr = re[2];
+        const tok = re[1] === undefined ? re[0] : re[1];
+        const result = {};
+
+        if (spr) {
+            result.spr = spr.trim();
+        }
+
+        token = tok.trim().match(typeTokenReg);
+
+        if (hasReg(token)) {
+            // 类型
+            result.matchType = token[1];
+        }
+
+        token = tok.trim().match(objTokenReg);
+
+        if (token && token.length && token.length >= 1) {
+            // 映射字段
+            result.matchParam = token[1];
+            re = end(result);
+            continue;
+        }
+
+        token = tok.trim().match(arrTokenReg);
+
+        if (token && token.length && token.length >= 1) {
+            // 映射数组
+            result.matchArrParam = token[1];
+            re = end(result);
+            continue;
+        }
+
+        if (!token) {
+            // 如果上面三个都没有匹配上 自认为是默认值
+            result.default = tok.trim();
+            re = end(result);
+            continue;
+        }
+    }
+
+    return parseResult;
 };

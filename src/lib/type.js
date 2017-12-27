@@ -1,23 +1,13 @@
-export const isObj = (obj) => {
-    return Object.prototype.toString.call(obj) === '[object Object]';
-};
+export const isObj = obj => Object.prototype.toString.call(obj) === '[object Object]';
 
-export const isFun = (obj) => {
-    return Object.prototype.toString.call(obj) === '[object Function]';
-};
+export const isFun = obj => Object.prototype.toString.call(obj) === '[object Function]';
 
-export const isArray = (obj) => {
-    return Object.prototype.toString.call(obj) === '[object Array]';
-};
+export const isArray = obj => Object.prototype.toString.call(obj) === '[object Array]';
 
-export const isStr = (str) => {
-    return Object.prototype.toString.call(str) === '[object String]';
-};
+export const isStr = str => Object.prototype.toString.call(str) === '[object String]';
 
-export const isNum = (num) => {
-    return Object.prototype.toString.call(num) === '[object Number]';
-};
+export const isNum = num => Object.prototype.toString.call(num) === '[object Number]';
 
-export const isEmptyObj = (obj) => {
-    return JSON.stringify(obj) === '{}';
-};
+export const isEmptyObj = obj => JSON.stringify(obj) === '{}';
+
+export const empty = obj => (obj === undefined);

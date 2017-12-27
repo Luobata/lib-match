@@ -2,17 +2,17 @@
  * @description match的自动补全
  */
 import config from 'MATCH/config';
-import { isObj } from 'LIB/util';
+import { isObj, has } from 'LIB/util';
 
 const autoComplete = (
-    result: object,
-    data: object
+    result: Object,
+    data: Object,
 ) => {
-
     if (!config.autoComplete) return;
 
-    for (let i in data) {
-        if (!result.hasOwnProperty(i)) {
+    for (const i in data) {
+        // if (!result.hasOwnProperty(i)) {
+        if (!has(result, i)) {
             result[i] = data[i];
         } else if (isObj(result[i]) && isObj(data[i])) {
             autoComplete(result[i], data[i]);
