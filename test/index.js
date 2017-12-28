@@ -381,6 +381,49 @@ describe('lib-match', function() {
                 pid: 1,
                 id: 26
             });
+
+            params = {
+                type: 1
+            };
+
+            const enumConf = {
+                typeOptions: [
+                {
+                    id: 1,
+                    name: 'one'
+                },
+                {
+                    id: 2,
+                    name: 'two'
+                }
+                ]
+            };
+
+            format = function (options, id, key, value) {
+                let k = '';
+
+                for (let i of options) {
+                    if (i[key] === id) {
+                        k = i[value];
+                    }
+                }
+
+                return k;
+            };
+            match.update(format, 'format');
+            data = match.parse(params, {
+                typeId: '$${{type}}',
+                typeName: function (data, format) {
+                    return format(enumConf.typeOptions, this.typeId, 'id', 'name');
+                },
+                typeNameAgain: (data, format) => format(enumConf.typeOptions, data.type, 'id', 'name')
+            });
+            assert.deepEqual(data, {
+                typeId: 1,
+                typeName: 'one',
+                typeNameAgain: 'one'
+            });
+
         });
 
         it('remove global key', function() {
@@ -399,6 +442,7 @@ describe('lib-match', function() {
     });
 
     describe('match config', function() {
+        // miss some case here
         it('filter undefined', function() {
             params = {
                 pid: 1,
@@ -424,6 +468,38 @@ describe('lib-match', function() {
                 pid: 1
             });
             match.config({autoComplete: false});
+
+            params = {
+                code: '200',
+                msg: 'ok',
+                http: 200,
+                data: {
+                    cityId: '1',
+                    provinceId: 2,
+                    dis: 2
+                }
+            };
+
+            data = match.parseConfig(params, {
+                data: {
+                    city: '$${{data.cityId}}',
+                    province: '$${{data.provinceId}}'
+                }
+            }, {
+                autoComplete: true
+            });
+            assert.deepEqual(data, {
+                code: '200',
+                msg: 'ok',
+                http: 200,
+                data: {
+                    cityId: '1',
+                    provinceId: 2,
+                    dis: 2,
+                    city: '1',
+                    province: 2
+                }
+            });
         });
         it('parseConfig by only current match', function() {
             params = {
@@ -462,10 +538,279 @@ describe('lib-match', function() {
             });
         });
     });
-    //describe('', function() {
-    //    it('', function() {
-    //        assert.deepEqual(data, {
-    //        });
-    //    });
-    //});
+    describe('match multi input', function() {
+        it('the match input be a Array', function() {
+            params = [
+            {
+                code: 200,
+                msg: 'ok',
+                data: [1, 2, 3]
+            },
+            {
+                code: 500,
+                msg: 'error',
+                data: [4, 5, 6]
+            }
+            ];
+
+            data = match.parse(params, {
+                code: '${0.code}',
+                msg: '${1.msg}',
+                data: function (data) {
+                    return data[0].data.concat(data[1].data);
+                }
+            });
+            assert.deepEqual(data, {
+                code: 200,
+                msg: 'error',
+                data: [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                ]
+            });
+        });
+    });
+    describe('match and trans the type', function() {
+        it('int string float boolean', function() {
+            params = {
+                pid: 'false',
+                name: 1,
+                id: '2',
+                city: 1,
+                district: '1.56'
+            };
+            data = match.parse(params, {
+                pid: '(boolean)$${{pid}}',
+                id: '(int)$${{id}}',
+                city: '(string)$${{city}}',
+                dis: '(float)$${{district}}'
+            });
+            assert.deepEqual(data, {
+                pid: false,
+                id: 2,
+                city: '1',
+                dis: 1.56
+            });
+        });
+        it('Int Boolean', function () {
+            params = {
+                pid: 'false',
+                name: 1,
+                id: '2',
+                city: 1,
+                district: '1.56'
+            };
+            data = match.parse(params, {
+                Pid: '(Boolean)$${{pid}}',
+                id: '(Int)$${{id}}',
+                id2: '(Int)$${{pid}}',
+            });
+            assert.deepEqual(data, {
+                Pid: true,
+                id: 2,
+                id2: 0,
+            });
+        });
+        it('trans with different situation', function() {
+            params = {
+                pid: 'false',
+                name: 1,
+                id: '2',
+                city: 1,
+                district: '1.56'
+            };
+            data = match.parse([params], {
+                pid: '(boolean)${0.pid}',
+                Pid: '(Boolean)${0.pid}',
+                name: '(Boolean)${0.name}',
+                id: '(int)${0.id}',
+                id2: '(Int)${0.pid}',
+                id3: '(Int)${0.name}',
+                id4: '(Int)${0.district}',
+                city: '(string)${0.city}',
+                dis: '(float)${0.district}'
+            });
+            assert.deepEqual(data, {
+                pid: false,
+                Pid: true,
+                name: true,
+                id: 2,
+                id2: 0,
+                id3: 1,
+                id4: 1,
+                city: '1',
+                dis: 1.56
+            });
+            params = [
+            {
+                id: 1,
+                type: 2
+            },
+            {
+                id: 2
+            }
+            ];
+            data = match.parse(params, [{
+                id: '(string)$${{id}}',
+                title: 'string',
+                type: "$${{type}} || 'abc'"
+            }]);
+            assert.deepEqual(data, [
+                    {
+                        id: '1',
+                        title: 'string',
+                        type: 2
+                    },
+                    {
+                        id: '2',
+                        title: 'string',
+                        type: 'abc'
+                    }
+            ]);
+        });
+    });
+    describe('match with chain use', function() {
+        it('chain with tmpConfig && parse', function() {
+            params = {
+                code: '200',
+                msg: 'ok',
+                http: 200,
+                data: {
+                    cityId: '1',
+                    provinceId: 2,
+                    dis: 2
+                }
+            };
+            data = 
+                match
+                .tmpConfig({
+                    autoComplete: true,
+                    ignoreTokenKey: ['test']
+                })
+                .parse(params, {
+                    data: {
+                        city: '$${{data.cityId}}',
+                        province: '$${{data.provinceId}}'
+                    }
+                });
+            assert.deepEqual(data, {
+                code: '200',
+                msg: 'ok',
+                http: 200,
+                data: {
+                    cityId: '1',
+                    provinceId: 2,
+                    dis: 2,
+                    city: '1',
+                    province: 2
+                }
+            });
+
+            params = null;
+            data = match
+                .tmpConfig({
+                    filterDefaultArray: true
+                })
+                .parse(params, [{
+                    id: '$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'"
+                }]);
+            assert.deepEqual(data, undefined);
+
+            params = {
+            };
+            data = match
+                .tmpConfig({
+                    filterDefaultArray: true
+                })
+                .parse(params, ['data', {
+                    id: '$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'"
+                }]);
+            assert.deepEqual(data, undefined);
+
+            params = {
+                code: 200,
+                msg: 'ok',
+                data: null
+            };
+            data = match
+                .tmpConfig({
+                    filterDefaultArray: true
+                })
+                .parse(params, {
+                    code: '$${{code}}',
+                    msg: '$${{msg}}',
+                    array: '$${{array}} || []',
+                    data: ['data', {
+                        id: '$${{id}}',
+                        title: 'string',
+                        type: "$${{type}} || 'abc'"
+                    }]
+                });
+            assert.deepEqual(data, {
+                code: 200,
+                msg: 'ok',
+                array: []
+            });
+
+            params = {
+                name: {
+                    id: 1
+                }
+            };
+            data = match
+                .tmpConfig({
+                    filterEmptyObject: true
+                        //filterDefaultObject: true
+                })
+                .parse(params, {
+                    title: '$${{abc}}',
+                    data: {
+                        id: '$${{name.id}}',
+                        value: {
+                            id: '$${{name.title}}'
+                        }
+                    },
+                    text: {
+                        title: '$${{name.abc}}'
+                    }
+                });
+            assert.deepEqual(data, {
+                data: {
+                    id: 1
+                }
+            });
+
+            data = match
+                .tmpConfig({
+                    filterEmptyObject: true
+                        //filterDefaultObject: true
+                })
+            .parse(params, {
+                title: '$${{abc}}',
+                data: {
+                    value: {
+                        id: '$${{name.title}}'
+                    }
+                },
+                text: {
+                    title: '$${{name.abc}}'
+                }
+            });
+            assert.deepEqual(data, undefined);
+        });
+    });
+    describe('', function() {
+        it('', function() {
+            assert.deepEqual(data, {
+            });
+        });
+    });
 });
