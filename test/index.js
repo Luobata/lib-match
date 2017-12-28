@@ -108,12 +108,57 @@ describe('lib-match', function() {
                 title: []
             });
         });
-        data = match.parse(params, {
-            title: '$${{abc}} || {}'
-        });
         it('object type', function() {
+            data = match.parse(params, {
+                title: '$${{abc}} || {}'
+            });
             assert.deepEqual(data, {
                 title: {}
+            });
+        });
+
+        it('multi token || usage', function() {
+            params = {
+                id: 0,
+                c: 1,
+                city: 2
+            };
+            data = match
+                .parse(params, {
+                    id: '$${{ids}} || 123',
+                    city: '$${{c}} || $${{city}} || 1',
+                    city2: '$${{province}} || 4',
+                    city3: '$${{c2}} || $${{city}} || 1',
+                });
+            assert.deepEqual(data, {
+                id: 123,
+                city: 1,
+                city2: 4,
+                city3: 2,
+            });
+        });
+    });
+    describe('match with default value with ||| token', function() {
+        it('multi token || and ||| usage', function() {
+            params = {
+                id: 0,
+                c: 1,
+                city: 2
+            };
+            data = match
+                .parse(params, {
+                    id: '$${{ids}} || 123',
+                    city: '$${{c}} || $${{city}} || 1',
+                    city2: '$${{province}} || 4',
+                    city3: '$${{c2}} || $${{city}} || 1',
+                    city4: '$${{id}} ||| 1',
+                });
+            assert.deepEqual(data, {
+                id: 123,
+                city: 1,
+                city2: 4,
+                city3: 2,
+                city4: 1,
             });
         });
     });
@@ -305,6 +350,42 @@ describe('lib-match', function() {
                     type: 'abc' 
                 }
                 ]
+            });
+        });
+
+        it('match Array<object> with basic key name', function() {
+            params = {
+                code: 200,
+                msg: 'ok',
+                data: [
+                {
+                    id: 1,
+                    name: 2
+                },
+                {
+                    id: 2,
+                    name: 3
+                }
+                ]
+            };
+
+            data = match
+                .parse(params, [
+                        'data', 'id'
+                ]);
+
+            assert.deepEqual(data, [1, 2]);
+
+            data = match
+                .parse(params, {
+                    code: '$${{code}}',
+                    msg: '$${{msg}}',
+                    data: ['data', 'id'],
+                });
+            assert.deepEqual(data, {
+                code: 200,
+                msg: 'ok',
+                data: [1, 2]
             });
         });
     });
@@ -672,6 +753,23 @@ describe('lib-match', function() {
                     }
             ]);
         });
+        it('type transform by error to NaN and default value', function() {
+            params = {
+                code: '200',
+                msg: 'ok',
+            };
+            data = match
+                .parse(params, {
+                    code: '(int)$${{code2}} || 2',
+                    code2: '(int)$${{code}} || 2',
+                    msg: '$${{msg}}',
+                });
+            assert.deepEqual(data, {
+                code: 2,
+                code2: 200,
+                msg: 'ok',
+            });
+        });
     });
     describe('match with chain use', function() {
         it('chain with tmpConfig && parse', function() {
@@ -805,11 +903,120 @@ describe('lib-match', function() {
                 }
             });
             assert.deepEqual(data, undefined);
-        });
-    });
-    describe('', function() {
-        it('', function() {
+
+            params = {
+                code: '200',
+                msg: 'ok',
+                data: null
+            };
+
+            data = 
+                match.parse(params, {
+                    code: '$${{code}}',
+                    msg: '$${{msg}}',
+                    data: {
+                        a: '$${{data.a}} || 123',
+                        b: {
+                            c: '$${{data.b.c}} || []',
+                            f: '$${{data.f}} || 2',
+                        },
+                        d: '$${{data.d}}'
+                    }
+                });
             assert.deepEqual(data, {
+                code: '200',
+                msg: 'ok',
+                data: {
+                    a: 123,
+                    b: {
+                        c: [],
+                        f: 2
+                    }
+                }
+            });
+
+            params = {
+                name: {
+                    id: 1
+                }
+            };
+            data = match
+                .tmpConfig({
+                    filterDefaultObject: true
+                })
+                .parse(params, {
+                    data: {
+                        xx: '$${{name.title}}',
+                        value: {
+                            id: '$${{name.title}}'
+                        },
+                        yy: '$${{name.title}}'
+                    },
+                    data2: {
+                        value2: '$${{name.title}} || {}'
+                    }
+                });
+            assert.deepEqual(data, {
+                data2: {
+                    value2: {
+                    }
+                }
+            });
+
+            params = {
+                code: 200,
+                msg: 'ok',
+                data: [
+                {
+                    list: [
+                    {
+                        roomId: 1
+                    },
+                    {
+                        roomId: 2
+                    }
+                    ]
+                }
+                ]
+            };
+
+            data = match
+                .tmpConfig({
+                    filterUndefined: false,
+                    filterNull: false
+                })
+            .parse(params, {
+                code: '$${{code}}',
+                msg: '$${{msg}}',
+                data: ['data', {
+                    checked: false,
+                    list: ['list', {
+                        roomId: '$${{roomId}}',
+                        active: false,
+                        empty: false
+                    }]
+                }]
+            });
+            assert.deepEqual(data, {
+                code: 200,
+                msg: 'ok',
+                data: [
+                {
+                    checked: false,
+                    list: [
+                    {
+                        roomId: 1,
+                        active: false,
+                        empty: false
+                    },
+                    {
+                        roomId: 2,
+                        active: false,
+                        empty: false
+                    }
+                    ]
+                }
+                ]
             });
         });
     });
