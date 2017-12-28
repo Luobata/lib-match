@@ -410,11 +410,62 @@ describe('lib-match', function() {
             assert.deepEqual(data, {
             });
         });
-    });
-    describe('', function() {
-        it('', function() {
+        it('auto complete key with same name', function() {
+            params = {
+                pid: 1,
+                id: 2
+            };
+            match.config({autoComplete: true});
+            data = match.parse(params, {
+                id: '$${{id}}'
+            });
             assert.deepEqual(data, {
+                id: 2,
+                pid: 1
+            });
+            match.config({autoComplete: false});
+        });
+        it('parseConfig by only current match', function() {
+            params = {
+                pid: 1,
+                id: 2,
+                cityId: 2
+            };
+            data = match.parseConfig(params, {
+                id: '$${{ID}}',
+                pid: '$${{pid}}'
+            }, {
+                autoComplete: true,
+                filterUndefined: false
+            });
+            assert.deepEqual(data, {
+                id: undefined,
+                pid: 1,
+                cityId: 2
+            });
+        });
+        it('ignore key without match', function() {
+            params = {
+                pid: 1,
+                id: 2,
+                cityId: 2
+            };
+            data = match.parseConfig(params, {
+                id: '$${{id}}',
+                pid: '$${{pid}}'
+            }, {
+                ignoreTokenKey: ['id']
+            });
+            assert.deepEqual(data, {
+                id: '$${{id}}',
+                pid: 1
             });
         });
     });
+    //describe('', function() {
+    //    it('', function() {
+    //        assert.deepEqual(data, {
+    //        });
+    //    });
+    //});
 });
