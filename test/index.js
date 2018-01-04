@@ -537,6 +537,9 @@ describe('lib-match', function() {
 
     describe('match config', function() {
         // miss some case here
+        // TODO filterEmptyObject
+        // TODO filterDefaultArray
+        // TODO filterDefaultObject
         it('filter undefined', function() {
             params = {
                 pid: 1,
