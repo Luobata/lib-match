@@ -1,6 +1,6 @@
 const assert = require('assert');
 //const match  = require('../src/index');
-const match  = require('../dist/match');
+const match = require('../dist/match');
 let params;
 let data;
 
@@ -11,7 +11,7 @@ describe('lib-match', function() {
                 abc: 1,
             };
             data = match.parse(params, {
-                title: '$${{abc}}'
+                title: '$${{abc}}',
             });
             assert.deepEqual(data, {
                 title: 1,
@@ -21,99 +21,96 @@ describe('lib-match', function() {
             params = {
                 abc: 1,
                 name: {
-                    id: 100
-                }
+                    id: 100,
+                },
             };
             data = match.parse(params, {
                 title: '$${{abc}}',
                 id: {
-                    id: '$${{name.id}}'
-                }
+                    id: '$${{name.id}}',
+                },
             });
             assert.deepEqual(data, {
                 title: 1,
                 id: {
-                    id: 100
-                }
+                    id: 100,
+                },
             });
         });
         it('without key return empty object', function() {
-            params = {
-            };
+            params = {};
             data = match.parse(params, {
                 title: '$${{abc}}',
                 data: {
-                    id: '$${{name.id}}'
+                    id: '$${{name.id}}',
                 },
                 text: {
-                    title: '$${{name.abc}}'
-                }
+                    title: '$${{name.abc}}',
+                },
             });
             assert.deepEqual(data, {
-                data: {
-                },
-                text: {
-                }
+                data: {},
+                text: {},
             });
         });
     });
 
     describe('match with default value with || token', function() {
         params = {
-            abcd: 1
+            abcd: 1,
         };
         it('number type', function() {
             data = match.parse(params, {
-                title: '$${{abc}} || 123'
+                title: '$${{abc}} || 123',
             });
             assert.deepEqual(data, {
-                title: 123
+                title: 123,
             });
         });
         it('boolean type', function() {
             data = match.parse(params, {
-                title: '$${{abc}} || true'
+                title: '$${{abc}} || true',
             });
             assert.deepEqual(data, {
-                title: true
+                title: true,
             });
 
             data = match.parse(params, {
-                title: '$${{abc}} || false'
+                title: '$${{abc}} || false',
             });
             assert.deepEqual(data, {
-                title: false
+                title: false,
             });
         });
         it('string type', function() {
             data = match.parse(params, {
-                title: '$${{abc}} || "123"'
+                title: '$${{abc}} || "123"',
             });
             assert.deepEqual(data, {
-                title: '123'
+                title: '123',
             });
 
             data = match.parse(params, {
-                title: "$${{abc}} || '123'"
+                title: "$${{abc}} || '123'",
             });
             assert.deepEqual(data, {
-                title: '123'
+                title: '123',
             });
         });
         it('array type', function() {
             data = match.parse(params, {
-                title: '$${{abc}} || []'
+                title: '$${{abc}} || []',
             });
             assert.deepEqual(data, {
-                title: []
+                title: [],
             });
         });
         it('object type', function() {
             data = match.parse(params, {
-                title: '$${{abc}} || {}'
+                title: '$${{abc}} || {}',
             });
             assert.deepEqual(data, {
-                title: {}
+                title: {},
             });
         });
 
@@ -121,15 +118,14 @@ describe('lib-match', function() {
             params = {
                 id: 0,
                 c: 1,
-                city: 2
+                city: 2,
             };
-            data = match
-                .parse(params, {
-                    id: '$${{ids}} || 123',
-                    city: '$${{c}} || $${{city}} || 1',
-                    city2: '$${{province}} || 4',
-                    city3: '$${{c2}} || $${{city}} || 1',
-                });
+            data = match.parse(params, {
+                id: '$${{ids}} || 123',
+                city: '$${{c}} || $${{city}} || 1',
+                city2: '$${{province}} || 4',
+                city3: '$${{c2}} || $${{city}} || 1',
+            });
             assert.deepEqual(data, {
                 id: 123,
                 city: 1,
@@ -143,16 +139,15 @@ describe('lib-match', function() {
             params = {
                 id: 0,
                 c: 1,
-                city: 2
+                city: 2,
             };
-            data = match
-                .parse(params, {
-                    id: '$${{ids}} || 123',
-                    city: '$${{c}} || $${{city}} || 1',
-                    city2: '$${{province}} || 4',
-                    city3: '$${{c2}} || $${{city}} || 1',
-                    city4: '$${{id}} ||| 1',
-                });
+            data = match.parse(params, {
+                id: '$${{ids}} || 123',
+                city: '$${{c}} || $${{city}} || 1',
+                city2: '$${{province}} || 4',
+                city3: '$${{c2}} || $${{city}} || 1',
+                city4: '$${{id}} ||| 1',
+            });
             assert.deepEqual(data, {
                 id: 123,
                 city: 1,
@@ -166,14 +161,14 @@ describe('lib-match', function() {
         it('return value calculate the function', function() {
             params = {
                 pid: 1,
-                id: 2
+                id: 2,
             };
             data = match.parse(params, {
                 pid: 1,
-                id: function (data) {
+                id: function(data) {
                     // this 指向自身 data 指向params
                     return data.pid + data.id + this.pid;
-                }
+                },
             });
             assert.deepEqual(data, {
                 pid: 1,
@@ -184,131 +179,145 @@ describe('lib-match', function() {
     describe('match Array<object>', function() {
         it('match array directly', function() {
             params = [
-            {
-                id: 1,
-                type: 2
-            },
-            {
-                id: 2
-            }
+                {
+                    id: 1,
+                    type: 2,
+                },
+                {
+                    id: 2,
+                },
             ];
-            data = match.parse(params, [{
-                id: '$${{id}}',
-                title: 'string',
-                type: "$${{type}} || 'abc'"
-            }]);
+            data = match.parse(params, [
+                {
+                    id: '$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'",
+                },
+            ]);
             assert.deepEqual(data, [
                 {
                     id: 1,
                     title: 'string',
-                    type: 2
+                    type: 2,
                 },
                 {
                     id: 2,
                     title: 'string',
-                    type: 'abc' 
-                }
+                    type: 'abc',
+                },
             ]);
         });
         it('match null or no match return empty array', function() {
             params = null;
-            data = match.parse(params, [{
-                id: '$${{id}}',
-                title: 'string',
-                type: "$${{type}} || 'abc'"
-            }]);
+            data = match.parse(params, [
+                {
+                    id: '$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'",
+                },
+            ]);
             assert.deepEqual(data, []);
 
-            params = {
-            };
-            data = match.parse(params, ['data', {
-                id: '$${{id}}',
-                title: 'string',
-                type: "$${{type}} || 'abc'"
-            }]);
+            params = {};
+            data = match.parse(params, [
+                'data',
+                {
+                    id: '$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'",
+                },
+            ]);
             assert.deepEqual(data, []);
 
             params = {
                 code: 200,
                 msg: 'ok',
-                data: null
+                data: null,
             };
             data = match.parse(params, {
                 code: '$${{code}}',
                 msg: '$${{msg}}',
-                data: ['data', {
-                    id: '$${{id}}',
-                    title: 'string',
-                    type: "$${{type}} || 'abc'"
-                }]
+                data: [
+                    'data',
+                    {
+                        id: '$${{id}}',
+                        title: 'string',
+                        type: "$${{type}} || 'abc'",
+                    },
+                ],
             });
             assert.deepEqual(data, {
                 code: 200,
                 msg: 'ok',
-                data: [
-                ]
+                data: [],
             });
         });
         it('match array as key in object', function() {
             params = {
                 data: [
-                {
-                    id: 1,
-                    type: 2
-                },
-                {
-                    id: 2
-                }
-                ]
+                    {
+                        id: 1,
+                        type: 2,
+                    },
+                    {
+                        id: 2,
+                    },
+                ],
             };
-            data = match.parse(params, ['data', {
-                id: '$${{id}}',
-                title: 'string',
-                type: "$${{type}} || 'abc'"
-            }]);
+            data = match.parse(params, [
+                'data',
+                {
+                    id: '$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'",
+                },
+            ]);
             assert.deepEqual(data, [
                 {
                     id: 1,
                     title: 'string',
-                    type: 2
+                    type: 2,
                 },
                 {
                     id: 2,
                     title: 'string',
-                    type: 'abc'
-                }
+                    type: 'abc',
+                },
             ]);
-            
+
             params = {
                 data: {
                     table: [
-                    {
-                        id: 1,
-                        type: 2
-                    },
-                    {
-                        id: 2
-                    }
-                    ]
-                }
+                        {
+                            id: 1,
+                            type: 2,
+                        },
+                        {
+                            id: 2,
+                        },
+                    ],
+                },
             };
-            data = match.parse(params, ['data.table', {
-                id: '$${{id}}',
-                title: 'string',
-                type: "$${{type}} || 'abc'"
-            }]);
+            data = match.parse(params, [
+                'data.table',
+                {
+                    id: '$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'",
+                },
+            ]);
 
             assert.deepEqual(data, [
                 {
                     id: 1,
                     title: 'string',
-                    type: 2
+                    type: 2,
                 },
                 {
                     id: 2,
                     title: 'string',
-                    type: 'abc'
-                }
+                    type: 'abc',
+                },
             ]);
         });
 
@@ -317,39 +326,42 @@ describe('lib-match', function() {
                 code: 200,
                 msg: 'ok',
                 data: [
-                {
-                    id: 1,
-                    type: 'a'
-                },
-                {
-                    id: 2
-                }
-                ]
+                    {
+                        id: 1,
+                        type: 'a',
+                    },
+                    {
+                        id: 2,
+                    },
+                ],
             };
             data = match.parse(params, {
                 code: '$${{code}}',
                 msg: '$${{msg}}',
-                data: ['data', {
-                    id: '$${{id}}',
-                    title: 'string',
-                    type: "$${{type}} || 'abc'"
-                }]
+                data: [
+                    'data',
+                    {
+                        id: '$${{id}}',
+                        title: 'string',
+                        type: "$${{type}} || 'abc'",
+                    },
+                ],
             });
             assert.deepEqual(data, {
                 code: 200,
                 msg: 'ok',
                 data: [
-                {
-                    id: 1,
-                    title: 'string',
-                    type: 'a' 
-                },
-                {
-                    id: 2,
-                    title: 'string',
-                    type: 'abc' 
-                }
-                ]
+                    {
+                        id: 1,
+                        title: 'string',
+                        type: 'a',
+                    },
+                    {
+                        id: 2,
+                        title: 'string',
+                        type: 'abc',
+                    },
+                ],
             });
         });
 
@@ -358,129 +370,125 @@ describe('lib-match', function() {
                 code: 200,
                 msg: 'ok',
                 data: [
-                {
-                    id: 1,
-                    name: 2
-                },
-                {
-                    id: 2,
-                    name: 3
-                }
-                ]
+                    {
+                        id: 1,
+                        name: 2,
+                    },
+                    {
+                        id: 2,
+                        name: 3,
+                    },
+                ],
             };
 
-            data = match
-                .parse(params, [
-                        'data', 'id'
-                ]);
+            data = match.parse(params, ['data', 'id']);
 
             assert.deepEqual(data, [1, 2]);
 
-            data = match
-                .parse(params, {
-                    code: '$${{code}}',
-                    msg: '$${{msg}}',
-                    data: ['data', 'id'],
-                });
+            data = match.parse(params, {
+                code: '$${{code}}',
+                msg: '$${{msg}}',
+                data: ['data', 'id'],
+            });
             assert.deepEqual(data, {
                 code: 200,
                 msg: 'ok',
-                data: [1, 2]
+                data: [1, 2],
             });
         });
     });
 
     describe('global params of helpful function in match', function() {
         let format = {
-            a: function () {
+            a: function() {
                 return 1;
             },
-            b: function () {
+            b: function() {
                 return 2;
-            }
+            },
         };
         it('register global object', function() {
             match.register(format, 'format');
             params = {
                 pid: 1,
-                id: 2
+                id: 2,
             };
             data = match.parse(params, {
                 pid: 1,
-                id: function (data, format) {
+                id: function(data, format) {
                     // this 指向自身 data 指向params
                     //return data.pid + data.id + this.pid + format.b();
                     return data.pid + data.id + this.pid + format.b();
-                }
+                },
             });
             assert.deepEqual(data, {
                 pid: 1,
-                id: 6 
+                id: 6,
             });
         });
         it('register global Array<object>', function() {
             match.register([format], 'format');
             params = {
                 pid: 1,
-                id: 2
+                id: 2,
             };
             data = match.parse(params, {
                 pid: 1,
-                id: function (data, format) {
+                id: function(data, format) {
                     // this 指向自身 data 指向params
                     return data.pid + data.id + this.pid + format.b();
-                }
+                },
             });
             assert.deepEqual(data, {
                 pid: 1,
-                id: 6 
+                id: 6,
             });
         });
 
         it('update global key', function() {
             format = {
-                a: function () {
+                a: function() {
                     return 11;
                 },
-                b: function () {
+                b: function() {
                     return 22;
-                }
+                },
             };
             match.update(format, 'format');
             params = {
                 pid: 1,
-                id: 2
+                id: 2,
             };
             data = match.parse(params, {
                 pid: 1,
-                id: function (data, format) {
+                id: function(data, format) {
                     // this 指向自身 data 指向params
                     return data.pid + data.id + this.pid + format.b();
-                }
+                },
             });
             assert.deepEqual(data, {
                 pid: 1,
-                id: 26
+                id: 26,
             });
 
             params = {
-                type: 1
+                type: 1,
             };
 
             const enumConf = {
                 typeOptions: [
-                {
-                    id: 1,
-                    name: 'one'
-                },
-                {
-                    id: 2,
-                    name: 'two'
-                }
-                ]
+                    {
+                        id: 1,
+                        name: 'one',
+                    },
+                    {
+                        id: 2,
+                        name: 'two',
+                    },
+                ],
             };
 
-            format = function (options, id, key, value) {
+            format = function(options, id, key, value) {
                 let k = '';
 
                 for (let i of options) {
@@ -494,30 +502,35 @@ describe('lib-match', function() {
             match.update(format, 'format');
             data = match.parse(params, {
                 typeId: '$${{type}}',
-                typeName: function (data, format) {
-                    return format(enumConf.typeOptions, this.typeId, 'id', 'name');
+                typeName: function(data, format) {
+                    return format(
+                        enumConf.typeOptions,
+                        this.typeId,
+                        'id',
+                        'name',
+                    );
                 },
-                typeNameAgain: (data, format) => format(enumConf.typeOptions, data.type, 'id', 'name')
+                typeNameAgain: (data, format) =>
+                    format(enumConf.typeOptions, data.type, 'id', 'name'),
             });
             assert.deepEqual(data, {
                 typeId: 1,
                 typeName: 'one',
-                typeNameAgain: 'one'
+                typeNameAgain: 'one',
             });
-
         });
 
         it('remove global key', function() {
             match.remove('format');
             data = match.parse(params, {
                 pid: 1,
-                id: function (data, format) {
+                id: function(data, format) {
                     // this 指向自身 data 指向params
                     return data.pid + data.id + this.pid + format.b();
-                }
+                },
             });
             assert.deepEqual(data, {
-                pid: 1
+                pid: 1,
             });
         });
     });
@@ -527,26 +540,25 @@ describe('lib-match', function() {
         it('filter undefined', function() {
             params = {
                 pid: 1,
-                id: 2
+                id: 2,
             };
             data = match.parse(params, {
-                id: '$${{xx}}'
+                id: '$${{xx}}',
             });
-            assert.deepEqual(data, {
-            });
+            assert.deepEqual(data, {});
         });
         it('auto complete key with same name', function() {
             params = {
                 pid: 1,
-                id: 2
+                id: 2,
             };
             match.config({autoComplete: true});
             data = match.parse(params, {
-                id: '$${{id}}'
+                id: '$${{id}}',
             });
             assert.deepEqual(data, {
                 id: 2,
-                pid: 1
+                pid: 1,
             });
             match.config({autoComplete: false});
 
@@ -557,18 +569,22 @@ describe('lib-match', function() {
                 data: {
                     cityId: '1',
                     provinceId: 2,
-                    dis: 2
-                }
+                    dis: 2,
+                },
             };
 
-            data = match.parseConfig(params, {
-                data: {
-                    city: '$${{data.cityId}}',
-                    province: '$${{data.provinceId}}'
-                }
-            }, {
-                autoComplete: true
-            });
+            data = match.parseConfig(
+                params,
+                {
+                    data: {
+                        city: '$${{data.cityId}}',
+                        province: '$${{data.provinceId}}',
+                    },
+                },
+                {
+                    autoComplete: true,
+                },
+            );
             assert.deepEqual(data, {
                 code: '200',
                 msg: 'ok',
@@ -578,80 +594,81 @@ describe('lib-match', function() {
                     provinceId: 2,
                     dis: 2,
                     city: '1',
-                    province: 2
-                }
+                    province: 2,
+                },
             });
         });
         it('parseConfig by only current match', function() {
             params = {
                 pid: 1,
                 id: 2,
-                cityId: 2
+                cityId: 2,
             };
-            data = match.parseConfig(params, {
-                id: '$${{ID}}',
-                pid: '$${{pid}}'
-            }, {
-                autoComplete: true,
-                filterUndefined: false
-            });
+            data = match.parseConfig(
+                params,
+                {
+                    id: '$${{ID}}',
+                    pid: '$${{pid}}',
+                },
+                {
+                    autoComplete: true,
+                    filterUndefined: false,
+                },
+            );
             assert.deepEqual(data, {
                 id: undefined,
                 pid: 1,
-                cityId: 2
+                cityId: 2,
             });
         });
         it('ignore key without match', function() {
             params = {
                 pid: 1,
                 id: 2,
-                cityId: 2
+                cityId: 2,
             };
-            data = match.parseConfig(params, {
-                id: '$${{id}}',
-                pid: '$${{pid}}'
-            }, {
-                ignoreTokenKey: ['id']
-            });
+            data = match.parseConfig(
+                params,
+                {
+                    id: '$${{id}}',
+                    pid: '$${{pid}}',
+                },
+                {
+                    ignoreTokenKey: ['id'],
+                },
+            );
             assert.deepEqual(data, {
                 id: '$${{id}}',
-                pid: 1
+                pid: 1,
             });
         });
     });
     describe('match multi input', function() {
         it('the match input be a Array', function() {
             params = [
-            {
-                code: 200,
-                msg: 'ok',
-                data: [1, 2, 3]
-            },
-            {
-                code: 500,
-                msg: 'error',
-                data: [4, 5, 6]
-            }
+                {
+                    code: 200,
+                    msg: 'ok',
+                    data: [1, 2, 3],
+                },
+                {
+                    code: 500,
+                    msg: 'error',
+                    data: [4, 5, 6],
+                },
             ];
 
             data = match.parse(params, {
                 code: '${0.code}',
                 msg: '${1.msg}',
-                data: function (data) {
+                data: function(data) {
                     return data[0].data.concat(data[1].data);
-                }
+                },
             });
             assert.deepEqual(data, {
                 code: 200,
                 msg: 'error',
-                data: [
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6
-                ]
+                data: [1, 2, 3, 4, 5, 6],
             });
         });
     });
@@ -662,28 +679,28 @@ describe('lib-match', function() {
                 name: 1,
                 id: '2',
                 city: 1,
-                district: '1.56'
+                district: '1.56',
             };
             data = match.parse(params, {
                 pid: '(boolean)$${{pid}}',
                 id: '(int)$${{id}}',
                 city: '(string)$${{city}}',
-                dis: '(float)$${{district}}'
+                dis: '(float)$${{district}}',
             });
             assert.deepEqual(data, {
                 pid: false,
                 id: 2,
                 city: '1',
-                dis: 1.56
+                dis: 1.56,
             });
         });
-        it('Int Boolean', function () {
+        it('Int Boolean', function() {
             params = {
                 pid: 'false',
                 name: 1,
                 id: '2',
                 city: 1,
-                district: '1.56'
+                district: '1.56',
             };
             data = match.parse(params, {
                 Pid: '(Boolean)$${{pid}}',
@@ -702,7 +719,7 @@ describe('lib-match', function() {
                 name: 1,
                 id: '2',
                 city: 1,
-                district: '1.56'
+                district: '1.56',
             };
             data = match.parse([params], {
                 pid: '(boolean)${0.pid}',
@@ -713,7 +730,7 @@ describe('lib-match', function() {
                 id3: '(Int)${0.name}',
                 id4: '(Int)${0.district}',
                 city: '(string)${0.city}',
-                dis: '(float)${0.district}'
+                dis: '(float)${0.district}',
             });
             assert.deepEqual(data, {
                 pid: false,
@@ -724,33 +741,35 @@ describe('lib-match', function() {
                 id3: 1,
                 id4: 1,
                 city: '1',
-                dis: 1.56
+                dis: 1.56,
             });
             params = [
-            {
-                id: 1,
-                type: 2
-            },
-            {
-                id: 2
-            }
+                {
+                    id: 1,
+                    type: 2,
+                },
+                {
+                    id: 2,
+                },
             ];
-            data = match.parse(params, [{
-                id: '(string)$${{id}}',
-                title: 'string',
-                type: "$${{type}} || 'abc'"
-            }]);
+            data = match.parse(params, [
+                {
+                    id: '(string)$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'",
+                },
+            ]);
             assert.deepEqual(data, [
-                    {
-                        id: '1',
-                        title: 'string',
-                        type: 2
-                    },
-                    {
-                        id: '2',
-                        title: 'string',
-                        type: 'abc'
-                    }
+                {
+                    id: '1',
+                    title: 'string',
+                    type: 2,
+                },
+                {
+                    id: '2',
+                    title: 'string',
+                    type: 'abc',
+                },
             ]);
         });
         it('type transform by error to NaN and default value', function() {
@@ -758,12 +777,11 @@ describe('lib-match', function() {
                 code: '200',
                 msg: 'ok',
             };
-            data = match
-                .parse(params, {
-                    code: '(int)$${{code2}} || 2',
-                    code2: '(int)$${{code}} || 2',
-                    msg: '$${{msg}}',
-                });
+            data = match.parse(params, {
+                code: '(int)$${{code2}} || 2',
+                code2: '(int)$${{code}} || 2',
+                msg: '$${{msg}}',
+            });
             assert.deepEqual(data, {
                 code: 2,
                 code2: 200,
@@ -780,20 +798,19 @@ describe('lib-match', function() {
                 data: {
                     cityId: '1',
                     provinceId: 2,
-                    dis: 2
-                }
+                    dis: 2,
+                },
             };
-            data = 
-                match
+            data = match
                 .tmpConfig({
                     autoComplete: true,
-                    ignoreTokenKey: ['test']
+                    ignoreTokenKey: ['test'],
                 })
                 .parse(params, {
                     data: {
                         city: '$${{data.cityId}}',
-                        province: '$${{data.provinceId}}'
-                    }
+                        province: '$${{data.provinceId}}',
+                    },
                 });
             assert.deepEqual(data, {
                 code: '200',
@@ -804,125 +821,131 @@ describe('lib-match', function() {
                     provinceId: 2,
                     dis: 2,
                     city: '1',
-                    province: 2
-                }
+                    province: 2,
+                },
             });
 
             params = null;
             data = match
                 .tmpConfig({
-                    filterDefaultArray: true
+                    filterDefaultArray: true,
                 })
-                .parse(params, [{
-                    id: '$${{id}}',
-                    title: 'string',
-                    type: "$${{type}} || 'abc'"
-                }]);
+                .parse(params, [
+                    {
+                        id: '$${{id}}',
+                        title: 'string',
+                        type: "$${{type}} || 'abc'",
+                    },
+                ]);
             assert.deepEqual(data, undefined);
 
-            params = {
-            };
+            params = {};
             data = match
                 .tmpConfig({
-                    filterDefaultArray: true
+                    filterDefaultArray: true,
                 })
-                .parse(params, ['data', {
-                    id: '$${{id}}',
-                    title: 'string',
-                    type: "$${{type}} || 'abc'"
-                }]);
+                .parse(params, [
+                    'data',
+                    {
+                        id: '$${{id}}',
+                        title: 'string',
+                        type: "$${{type}} || 'abc'",
+                    },
+                ]);
             assert.deepEqual(data, undefined);
 
             params = {
                 code: 200,
                 msg: 'ok',
-                data: null
+                data: null,
             };
             data = match
                 .tmpConfig({
-                    filterDefaultArray: true
+                    filterDefaultArray: true,
                 })
                 .parse(params, {
                     code: '$${{code}}',
                     msg: '$${{msg}}',
                     array: '$${{array}} || []',
-                    data: ['data', {
-                        id: '$${{id}}',
-                        title: 'string',
-                        type: "$${{type}} || 'abc'"
-                    }]
+                    data: [
+                        'data',
+                        {
+                            id: '$${{id}}',
+                            title: 'string',
+                            type: "$${{type}} || 'abc'",
+                        },
+                    ],
                 });
             assert.deepEqual(data, {
                 code: 200,
                 msg: 'ok',
-                array: []
+                array: [],
             });
 
             params = {
                 name: {
-                    id: 1
-                }
+                    id: 1,
+                },
             };
             data = match
                 .tmpConfig({
-                    filterEmptyObject: true
-                        //filterDefaultObject: true
+                    filterEmptyObject: true,
+                    //filterDefaultObject: true
                 })
                 .parse(params, {
                     title: '$${{abc}}',
                     data: {
                         id: '$${{name.id}}',
                         value: {
-                            id: '$${{name.title}}'
-                        }
+                            id: '$${{name.title}}',
+                        },
                     },
                     text: {
-                        title: '$${{name.abc}}'
-                    }
+                        title: '$${{name.abc}}',
+                    },
                 });
             assert.deepEqual(data, {
                 data: {
-                    id: 1
-                }
+                    id: 1,
+                },
             });
 
             data = match
                 .tmpConfig({
-                    filterEmptyObject: true
-                        //filterDefaultObject: true
+                    filterEmptyObject: true,
+                    //filterDefaultObject: true
                 })
-            .parse(params, {
-                title: '$${{abc}}',
-                data: {
-                    value: {
-                        id: '$${{name.title}}'
-                    }
-                },
-                text: {
-                    title: '$${{name.abc}}'
-                }
-            });
+                .parse(params, {
+                    title: '$${{abc}}',
+                    data: {
+                        value: {
+                            id: '$${{name.title}}',
+                        },
+                    },
+                    text: {
+                        title: '$${{name.abc}}',
+                    },
+                });
             assert.deepEqual(data, undefined);
 
             params = {
                 code: '200',
                 msg: 'ok',
-                data: null
+                data: null,
             };
 
-            data = 
-                match.parse(params, {
-                    code: '$${{code}}',
-                    msg: '$${{msg}}',
-                    data: {
-                        a: '$${{data.a}} || 123',
-                        b: {
-                            c: '$${{data.b.c}} || []',
-                            f: '$${{data.f}} || 2',
-                        },
-                        d: '$${{data.d}}'
-                    }
-                });
+            data = match.parse(params, {
+                code: '$${{code}}',
+                msg: '$${{msg}}',
+                data: {
+                    a: '$${{data.a}} || 123',
+                    b: {
+                        c: '$${{data.b.c}} || []',
+                        f: '$${{data.f}} || 2',
+                    },
+                    d: '$${{data.d}}',
+                },
+            });
             assert.deepEqual(data, {
                 code: '200',
                 msg: 'ok',
@@ -930,93 +953,98 @@ describe('lib-match', function() {
                     a: 123,
                     b: {
                         c: [],
-                        f: 2
-                    }
-                }
+                        f: 2,
+                    },
+                },
             });
 
             params = {
                 name: {
-                    id: 1
-                }
+                    id: 1,
+                },
             };
             data = match
                 .tmpConfig({
-                    filterDefaultObject: true
+                    filterDefaultObject: true,
                 })
                 .parse(params, {
                     data: {
                         xx: '$${{name.title}}',
                         value: {
-                            id: '$${{name.title}}'
+                            id: '$${{name.title}}',
                         },
-                        yy: '$${{name.title}}'
+                        yy: '$${{name.title}}',
                     },
                     data2: {
-                        value2: '$${{name.title}} || {}'
-                    }
+                        value2: '$${{name.title}} || {}',
+                    },
                 });
             assert.deepEqual(data, {
                 data2: {
-                    value2: {
-                    }
-                }
+                    value2: {},
+                },
             });
 
             params = {
                 code: 200,
                 msg: 'ok',
                 data: [
-                {
-                    list: [
                     {
-                        roomId: 1
+                        list: [
+                            {
+                                roomId: 1,
+                            },
+                            {
+                                roomId: 2,
+                            },
+                        ],
                     },
-                    {
-                        roomId: 2
-                    }
-                    ]
-                }
-                ]
+                ],
             };
 
             data = match
                 .tmpConfig({
                     filterUndefined: false,
-                    filterNull: false
+                    filterNull: false,
                 })
-            .parse(params, {
-                code: '$${{code}}',
-                msg: '$${{msg}}',
-                data: ['data', {
-                    checked: false,
-                    list: ['list', {
-                        roomId: '$${{roomId}}',
-                        active: false,
-                        empty: false
-                    }]
-                }]
-            });
+                .parse(params, {
+                    code: '$${{code}}',
+                    msg: '$${{msg}}',
+                    data: [
+                        'data',
+                        {
+                            checked: false,
+                            list: [
+                                'list',
+                                {
+                                    roomId: '$${{roomId}}',
+                                    active: false,
+                                    empty: false,
+                                },
+                            ],
+                        },
+                    ],
+                });
             assert.deepEqual(data, {
                 code: 200,
                 msg: 'ok',
                 data: [
-                {
-                    checked: false,
-                    list: [
                     {
-                        roomId: 1,
-                        active: false,
-                        empty: false
+                        checked: false,
+                        list: [
+                            {
+                                roomId: 1,
+                                active: false,
+                                empty: false,
+                            },
+                            {
+                                roomId: 2,
+                                active: false,
+                                empty: false,
+                            },
+                        ],
                     },
-                    {
-                        roomId: 2,
-                        active: false,
-                        empty: false
-                    }
-                    ]
-                }
-                ]
+                ],
             });
         });
     });
