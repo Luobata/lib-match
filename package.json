@@ -10,7 +10,9 @@
   "version": "1.1.2",
   "description": "一个应用于前后端完全分离时代下的字段映射库",
   "main": "./dist/match.js",
-  "dependencies": {},
+  "dependencies": {
+    "@std/esm": "^0.19.1"
+  },
   "devDependencies": {
     "babel-core": "^6.24.0",
     "babel-eslint": "^8.0.1",
