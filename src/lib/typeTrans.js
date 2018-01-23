@@ -3,6 +3,7 @@ const isNaN = Number.isNaN;
 export const typeTrans = (data: any, type: string) => {
     // 字符串对应的 false 转化为false true 转化为true
     const booleanFun = () => data.toLowerCase() !== 'false';
+    const BooleanFun = () => !!data;
     if (type === '!boolean') {
         return !booleanFun();
     }
@@ -10,8 +11,12 @@ export const typeTrans = (data: any, type: string) => {
         return booleanFun();
     }
 
+    if (type === '!Boolean') {
+        return !BooleanFun();
+    }
+
     if (type === 'Boolean') {
-        return !!data;
+        return BooleanFun();
     }
 
     if (type === 'int') {

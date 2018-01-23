@@ -13,5 +13,7 @@ let data = match.parse(params, {
     p: '(boolean)$${{pid}}',
     pid: '!(boolean)$${{pid}}',
     pid2: '!(boolean)$${{pid2}}',
+    pid3: '!(Boolean)$${{pid}}',
+    pid4: '!(Boolean)$${{pid2}}',
 });
 console.log(data);

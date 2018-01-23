@@ -41,11 +41,13 @@ it('Int Boolean', function() {
     };
     data = match.parse(params, {
         Pid: '(Boolean)$${{pid}}',
+        Pid2: '!(Boolean)$${{pid}}',
         id: '(Int)$${{id}}',
         id2: '(Int)$${{pid}}',
     });
     assert.deepEqual(data, {
         Pid: true,
+        Pid2: false,
         id: 2,
         id2: 0,
     });
