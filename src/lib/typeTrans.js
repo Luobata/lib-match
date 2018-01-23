@@ -1,12 +1,13 @@
 const isNaN = Number.isNaN;
 
-export const typeTrans = (
-    data: any,
-    type: string,
-) => {
+export const typeTrans = (data: any, type: string) => {
     // 字符串对应的 false 转化为false true 转化为true
+    const booleanFun = () => data.toLowerCase() !== 'false';
+    if (type === '!boolean') {
+        return !booleanFun();
+    }
     if (type === 'boolean') {
-        return data.toLowerCase() !== 'false';
+        return booleanFun();
     }
 
     if (type === 'Boolean') {
@@ -18,7 +19,7 @@ export const typeTrans = (
     }
 
     if (type === 'Int') {
-        return (isNaN(parseInt(data, 10)) ? 0 : parseInt(data, 10));
+        return isNaN(parseInt(data, 10)) ? 0 : parseInt(data, 10);
     }
 
     if (type === 'float') {
@@ -60,7 +61,7 @@ export const typeCharge = (str: string) => {
         // 说明不是字符串类型的值
         const num = parseFloat(str);
         /* eslint-disable no-nested-ternary */
-        const boo = str === 'false' ? false : (str === 'true' ? true : '');
+        const boo = str === 'false' ? false : str === 'true' ? true : '';
         /* eslint-disable no-nested-ternary */
         str = num || boo !== '' ? num || boo : str;
         return str;
@@ -76,7 +77,7 @@ export const objToArray = (
     try {
         let arr = [];
         for (let i = 0; i < data.length; i++) {
-        // for (let i of data) {
+            // for (let i of data) {
             arr = arr.concat(data[i][key]);
         }
 

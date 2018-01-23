@@ -4,22 +4,21 @@ const expect = require('chai').expect;
 let params = {
     code: '200',
     msg: 'ok',
-    data: null
+    data: null,
 };
 
-let data = 
-    match.parse(params, {
-        code: '$${{code}}',
-        msg: '$${{msg}}',
-        data: {
-            a: '$${{data.a}} || 123',
-            b: {
-                c: '$${{data.b.c}} || []',
-                f: '$${{data.f}} || 2',
-            },
-            d: '$${{data.d}}'
-        }
-    });
+let data = match.parse(params, {
+    code: '$${{code}}',
+    msg: '$${{msg}}',
+    data: {
+        a: '$${{data.a}} || 123',
+        b: {
+            c: '$${{data.b.c}} || []',
+            f: '$${{data.f}} || 2',
+        },
+        d: '$${{data.d}}',
+    },
+});
 expect(data).to.be.eql({
     code: '200',
     msg: 'ok',
@@ -27,7 +26,7 @@ expect(data).to.be.eql({
         a: 123,
         b: {
             c: [],
-            f: 2
-        }
-    }
+            f: 2,
+        },
+    },
 });

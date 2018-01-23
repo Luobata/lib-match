@@ -6,6 +6,7 @@ let data;
 it('int string float boolean', function() {
     params = {
         pid: 'false',
+        xid: 'true',
         name: 1,
         id: '2',
         city: 1,
@@ -13,12 +14,18 @@ it('int string float boolean', function() {
     };
     data = match.parse(params, {
         pid: '(boolean)$${{pid}}',
+        pid2: '!(boolean)$${{pid}}',
+        xid: '(boolean)$${{xid}}',
+        xid2: '!(boolean)$${{xid}}',
         id: '(int)$${{id}}',
         city: '(string)$${{city}}',
         dis: '(float)$${{district}}',
     });
     assert.deepEqual(data, {
         pid: false,
+        pid2: true,
+        xid: true,
+        xid2: false,
         id: 2,
         city: '1',
         dis: 1.56,

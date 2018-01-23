@@ -27,7 +27,7 @@ export const getData = (
         par = par[token[i]];
     }
 
-    return (type && par !== undefined) ? typeTrans(par, type) : par;
+    return type && par !== undefined ? typeTrans(par, type) : par;
 };
 
 export const getArrData = (
@@ -49,19 +49,15 @@ export const getArrData = (
 
 const isIgnore = (key: string) => config.ignoreTokenKey.indexOf(key) !== -1;
 
-export const parse = function parse(
-    str: any,
-    key: any,
-) {
+export const parse = function parse(str: any, key: any) {
     let token;
-    const parseResult = {
-    };
+    const parseResult = {};
     const objTokenReg = /\$\$\{\{(.*)\}\}/;
     const arrTokenReg = /\$\{(.*)\}/;
-    const typeTokenReg = /\((boolean|Boolean|int|Int|string|float)\)\$/;
+    const typeTokenReg = /(!?)\((boolean|Boolean|int|Int|string|float)\)\$/;
     // const strTokenReg = /(?:(.*?)(\|\|))|(.+)/ig;
     // 隐藏token
-    const strTokenReg = /(?:(.*?)(\|\|(?:\||)|(?:&&)))|(.+)/ig;
+    const strTokenReg = /(?:(.*?)(\|\|(?:\||)|(?:&&)))|(.+)/gi;
 
     if (empty(key)) {
         parseResult.matchArrayKey = str;
@@ -86,10 +82,10 @@ export const parse = function parse(
         return parseResult;
     }
 
-    if (!isStr(str) ||
+    if (
+        !isStr(str) ||
         isIgnore(key) ||
-        (!objTokenReg.test(str) &&
-            !arrTokenReg.test(str))
+        (!objTokenReg.test(str) && !arrTokenReg.test(str))
     ) {
         // 不是字符串 直接返回
         parseResult.noMatch = str;
@@ -114,7 +110,7 @@ export const parse = function parse(
 
         if (hasReg(token)) {
             // 类型
-            result.matchType = token[1];
+            result.matchType = token[1] + token[2];
         }
 
         token = tok.trim().match(objTokenReg);
