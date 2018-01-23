@@ -15,7 +15,7 @@
   ],
   "settings": {
       "import/resolver": {
-          "webpack": "build/webpack.config.js"
+          "webpack": "./webpack.config.js"
       }
   },
   "rules": {
