@@ -1,17 +1,17 @@
 import { parse, getData } from 'MATCH/parse';
 import parseToData from 'MATCH/parse-data';
-import {
-    isObj,
-    isStr,
-    isArray,
-    has,
-} from 'LIB/util';
+import { isObj, isStr, isArray, has } from 'LIB/util';
 import { pushStack, removeStack, cleanStack, updateStack } from 'MATCH/stack';
 import { filter, filterEmpty } from 'MATCH/filter';
 import autoComplete from 'MATCH/auto-complete';
-import config, { extendConfig, extendTmpConfig, restoreConfig, changeFilterDefaultObject } from 'MATCH/config';
+import config, {
+    extendConfig,
+    extendTmpConfig,
+    restoreConfig,
+    changeFilterDefaultObject,
+} from 'MATCH/config';
 import 'LIB/polyfill';
-
+import debug from 'MATCH/debug';
 
 /**
  * 对象映射
@@ -42,10 +42,7 @@ export const matchObject = function matchObject(
 /**
  * 数组映射
  */
-export const matchArray = function matchArray(
-    data: any,
-    arr: Array,
-) {
+export const matchArray = function matchArray(data: any, arr: Array) {
     const result = [];
 
     try {
@@ -72,10 +69,7 @@ export const matchArray = function matchArray(
 };
 
 const match = {
-    parse: (
-        combineData: Object | Array,
-        keyData: Object | Array,
-    ) => {
+    parse: (combineData: Object | Array, keyData: Object | Array) => {
         let result;
 
         if (isObj(keyData)) {
@@ -87,6 +81,7 @@ const match = {
         }
 
         autoComplete(result, combineData);
+        debug(result, combineData, keyData);
 
         restoreConfig();
 
@@ -111,19 +106,13 @@ const match = {
 
         return this;
     },
-    register: (
-        obj: Object | Array,
-        name: string,
-    ) => {
+    register: (obj: Object | Array, name: string) => {
         pushStack({
             value: obj,
             name,
         });
     },
-    update: (
-        obj: Object | Array,
-        name: string,
-    ) => {
+    update: (obj: Object | Array, name: string) => {
         updateStack(obj, name);
         return this;
     },

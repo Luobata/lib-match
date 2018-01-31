@@ -11,13 +11,15 @@ const config = {
     filterDefaultObject: false, // 过滤匹配对象产生的Object 不过滤自定的返回值 {}
     autoComplete: false, // 自动补全
     ignoreTokenKey: [], // 忽略解析的key
+    debug: false, // debug 模式
 };
 
 let tmpConfig = null;
+export let debugArray = [];
 
 export let filterDefaultObject = false;
 
-export const changeFilterDefaultObject = (boo) => {
+export const changeFilterDefaultObject = boo => {
     filterDefaultObject = boo;
 };
 
