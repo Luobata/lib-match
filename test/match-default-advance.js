@@ -17,7 +17,7 @@ it('multi token || and ||| usage', function() {
         city4: '$${{id}} ||| 1',
         city5: '$${{city}} ||| 1',
         city6: '$${{ids}} ||| 1',
-        city7: '$${{ids}} || $${id} ||| 1',
+        city7: '$${{ids}} || $${{id}} ||| 1',
     });
     assert.deepEqual(data, {
         id: 123,
