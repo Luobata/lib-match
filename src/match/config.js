@@ -15,11 +15,11 @@ const config = {
 };
 
 let tmpConfig = null;
-export let debugArray = [];
+export const debugArray = [];
 
 export let filterDefaultObject = false;
 
-export const changeFilterDefaultObject = boo => {
+export const changeFilterDefaultObject = (boo) => {
     filterDefaultObject = boo;
 };
 

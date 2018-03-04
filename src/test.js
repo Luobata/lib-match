@@ -5,7 +5,7 @@
 // console.log(m);
 // console.log(m2);
 
-import 'TEST/test-new';
+import 'TEST/test-tmp';
 import 'TEST/test-1';
 import 'TEST/test-2';
 import 'TEST/test-3';

@@ -5,28 +5,21 @@ let params = {
     code: '200',
     msg: 'ok',
     data: null,
+    data: [{
+        a: 1,
+        b: 'c',
+    }, 2],
 };
 
 let data = match.parse(params, {
     code: '$${{code}}',
     msg: '$${{msg}}',
-    data: {
-        a: '$${{data.a}} || 123',
-        b: {
-            c: '$${{data.b.c}} || []',
-            f: '$${{data.f}} || 2',
-        },
-        d: '$${{data.d}}',
-    },
+    data: '$${{data.0.a}}',
+    data2: '$${{data.1}}',
 });
 expect(data).to.be.eql({
     code: '200',
     msg: 'ok',
-    data: {
-        a: 123,
-        b: {
-            c: [],
-            f: 2,
-        },
-    },
+    data: 1,
+    data2: 2,
 });
