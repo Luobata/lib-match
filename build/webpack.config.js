@@ -15,7 +15,7 @@ devWebpackConfig.plugins = [];
 
 var prodWebpackConfig = {
     devtool: productionSourceMap ? '#source-map' : false,
-    entry : root + "/src/index.js",
+    entry : root + '/src/index.js',
     output: {
         path: assetsRoot,
         library: 'match',

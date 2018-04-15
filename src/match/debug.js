@@ -9,6 +9,6 @@ export default (result, combineData, keyData) => {
         result,
         data: combineData,
         matchObj: keyData,
-        config: { ...config },
+        config: Object.assign({}, config),
     });
 };
