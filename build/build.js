@@ -13,8 +13,8 @@ spinner.start();
 var path = require('path');
 var dist = path.resolve(__dirname, '../') + '/dist/';
 require('shelljs/global');
-rm('-rf', dist);
-mkdir('-p', dist);
+// rm('-rf', dist);
+// mkdir('-p', dist);
 
 
 var webpack = require('webpack');

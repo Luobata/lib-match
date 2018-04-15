@@ -5,10 +5,14 @@ let params = {
     code: '200',
     msg: 'ok',
     data: null,
-    data: [{
-        a: 1,
-        b: 'c',
-    }, 2],
+    data: [
+        {
+            a: 1,
+            b: 'c',
+        },
+        2,
+    ],
+    data2: null,
 };
 
 let data = match.parse(params, {
@@ -17,6 +21,7 @@ let data = match.parse(params, {
     data: '$${{data.0.a}}',
     data2: '$${{data.1}}',
 });
+console.log(data);
 expect(data).to.be.eql({
     code: '200',
     msg: 'ok',

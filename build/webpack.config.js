@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var webpackMerge = require('webpack-merge')
 var path = require('path');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 var root = path.resolve(__dirname, '../').replace(/\\/g, '/') + '/';
 var assetsRoot = root +　'dist/';
@@ -27,12 +28,15 @@ var prodWebpackConfig = {
                 NODE_ENV: '"production"'
             }
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
+        new UglifyJsPlugin({
+            uglifyOptions: {
+                compress: {
+                    warnings: false,
+                },
+            },
+            sourceMap: true,
+            parallel: true,
         }),
-        new webpack.optimize.OccurenceOrderPlugin()
     ]
 };
 

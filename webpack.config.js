@@ -5,12 +5,11 @@ var root = path.resolve(__dirname, './');
 module.exports = {
     devtool: 'source-map',
 
-    entry:  __dirname + "/src/test.js",
+    entry:  [
+        'webpack-hot-middleware/client?quiet=true',
+        __dirname + "/src/test.js",
+    ],
     output: {
-        stats: {
-            colors: true
-        },
-        noInfo: true,
         path: __dirname + "/",
         filename: "match.js"
     },
@@ -25,11 +24,11 @@ module.exports = {
         loaders: [
         {
             test: /\.json$/,
-            loader: "json"
+            loader: "json-loader"
         },
         {
             test: /\.js$/,
-            loader: 'babel',
+            loader: 'babel-loader',
             exclude: /node_modules/,
             include: root
         },
@@ -45,15 +44,13 @@ module.exports = {
                 NODE_ENV: '"production"'
             }
         }),
-        new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoEmitOnErrorsPlugin()
     ],
 
     devServer: {
         contentBase: "./src/",
         port: 9999,
-        colors: true,
         historyApiFallback: true,
         inline: true
     }
