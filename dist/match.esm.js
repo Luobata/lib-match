@@ -59,6 +59,18 @@ var typeCharge = function typeCharge(str) {
             return str;
         }
 
+        if (str === 'null') {
+            return null;
+        }
+
+        if (str === 'undefined') {
+            return undefined;
+        }
+
+        if (str === 'NaN') {
+            return NaN;
+        }
+
         if (arrayReg.test(str)) {
             return [];
         }
@@ -682,5 +694,5 @@ var match = {
     }
 };
 
-module.exports = match;
+export default match;
 //# sourceMappingURL=match.esm.js.map
