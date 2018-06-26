@@ -1,4 +1,3 @@
-const match = require('../dist/match');
 const assert = require('assert');
 let params;
 let data;
@@ -40,10 +39,13 @@ it('normal array key in object', function() {
         name: {
             id: 100,
         },
-        data: [{
-            a: 1,
-            b: 'c',
-        }, 2],
+        data: [
+            {
+                a: 1,
+                b: 'c',
+            },
+            2,
+        ],
     };
     data = match.parse(params, {
         title: '$${{abc}}',

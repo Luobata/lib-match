@@ -1,8 +1,10 @@
 const assert = require('assert');
 //const match  = require('../src/index');
-const match = require('../dist/match');
+const match = require('../dist/match').default;
 let params;
 let data;
+
+global.match = match;
 
 describe('lib-match', function() {
     describe('normal match', function() {

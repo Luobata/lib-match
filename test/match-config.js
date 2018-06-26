@@ -1,5 +1,4 @@
 const assert = require('assert');
-const match = require('../dist/match');
 let params;
 let data;
 
@@ -18,7 +17,7 @@ it('auto complete key with same name', function() {
         pid: 1,
         id: 2,
     };
-    match.config({autoComplete: true});
+    match.config({ autoComplete: true });
     data = match.parse(params, {
         id: '$${{id}}',
     });
@@ -26,7 +25,7 @@ it('auto complete key with same name', function() {
         id: 2,
         pid: 1,
     });
-    match.config({autoComplete: false});
+    match.config({ autoComplete: false });
 
     params = {
         code: '200',

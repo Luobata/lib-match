@@ -1,5 +1,4 @@
 const assert = require('assert');
-const match = require('../dist/match');
 let params;
 let data;
 let format = {
