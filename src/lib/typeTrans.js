@@ -55,6 +55,18 @@ export const typeCharge = (str: string) => {
             return str;
         }
 
+        if (str === 'null') {
+            return null;
+        }
+
+        if (str === 'undefined') {
+            return undefined;
+        }
+
+        if (str === 'NaN') {
+            return NaN;
+        }
+
         if (arrayReg.test(str)) {
             return [];
         }

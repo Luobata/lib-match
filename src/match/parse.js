@@ -93,7 +93,7 @@ export const parse = function parse(str: any, key: any) {
     }
 
     let re = strTokenReg.exec(str);
-    const end = (result) => {
+    const end = result => {
         parseResult.matchStr = addArr(parseResult.matchStr, result);
         return strTokenReg.exec(str);
     };
