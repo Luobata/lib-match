@@ -221,3 +221,75 @@ it('match Array<object> with basic key name', function() {
         data: [1, 2],
     });
 });
+
+it('match Array with autoComplete', function() {
+    params = {
+        data: [
+            {
+                id: 1,
+                type: 2,
+                c: 1,
+            },
+            {
+                id: 2,
+            },
+        ],
+    };
+
+    data = match.parseConfig(
+        params,
+        [
+            'data',
+            {
+                id: '$${{id}}',
+                title: 'string',
+                type: "$${{type}} || 'abc'",
+            },
+        ],
+        {
+            autoComplete: true,
+        },
+    );
+
+    assert.deepEqual(data, [
+        {
+            id: 1,
+            title: 'string',
+            type: 2,
+            c: 1,
+        },
+        {
+            id: 2,
+            title: 'string',
+            type: 'abc',
+        },
+    ]);
+
+    data = match.parseConfig(
+        params.data,
+        [
+            {
+                id: '$${{id}}',
+                title: 'string',
+                type: "$${{type}} || 'abc'",
+            },
+        ],
+        {
+            autoComplete: true,
+        },
+    );
+
+    assert.deepEqual(data, [
+        {
+            id: 1,
+            title: 'string',
+            type: 2,
+            c: 1,
+        },
+        {
+            id: 2,
+            title: 'string',
+            type: 'abc',
+        },
+    ]);
+});
