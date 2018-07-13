@@ -525,7 +525,6 @@ var autoComplete = function autoComplete(result, data) {
     if (!config.autoComplete) return;
 
     for (var i in data) {
-        // if (!result.hasOwnProperty(i)) {
         if (!has(result, i)) {
             result[i] = data[i];
         } else if (isObj(result[i]) && isObj(data[i])) {
@@ -638,13 +637,19 @@ var match = {
 
         if (isObj(keyData)) {
             result = matchObject(combineData, keyData);
+            autoComplete(result, combineData);
         }
 
         if (isArray(keyData)) {
             result = matchArray(combineData, keyData);
+
+            if (keyData.length === 2) {
+                autoComplete(result, combineData[keyData[0]]);
+            } else {
+                autoComplete(result, combineData);
+            }
         }
 
-        autoComplete(result, combineData);
         debug(result, combineData, keyData);
 
         restoreConfig();
