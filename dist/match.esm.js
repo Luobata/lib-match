@@ -643,6 +643,7 @@ var match = {
         if (isArray(keyData)) {
             result = matchArray(combineData, keyData);
 
+            // length 2 的时候autoComplete的对象是选中的key对象
             if (keyData.length === 2) {
                 autoComplete(result, combineData[keyData[0]]);
             } else {
