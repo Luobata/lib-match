@@ -266,6 +266,39 @@ it('match Array with autoComplete', function() {
     ]);
 
     data = match.parseConfig(
+        params,
+        {
+            data: [
+                'data',
+                {
+                    id: '$${{id}}',
+                    title: 'string',
+                    type: "$${{type}} || 'abc'",
+                },
+            ],
+        },
+        {
+            autoComplete: true,
+        },
+    );
+
+    assert.deepEqual(data, {
+        data: [
+            {
+                id: 1,
+                title: 'string',
+                type: 2,
+                c: 1,
+            },
+            {
+                id: 2,
+                title: 'string',
+                type: 'abc',
+            },
+        ],
+    });
+
+    data = match.parseConfig(
         params.data,
         [
             {
