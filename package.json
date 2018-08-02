@@ -9,7 +9,7 @@
         "lint": "eslint --fix src/"
     },
     "name": "lib-match",
-    "version": "1.1.7",
+    "version": "1.1.8",
     "description": "一个应用于前后端完全分离时代下的字段映射库",
     "main": "./dist/match.js",
     "module": "./dist/match.esm.js",

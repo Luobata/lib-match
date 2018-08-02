@@ -528,7 +528,13 @@ var autoComplete = function autoComplete(result, data) {
         if (!has(result, i)) {
             result[i] = data[i];
         } else if (isObj(result[i]) && isObj(data[i])) {
+            // object
             autoComplete(result[i], data[i]);
+        } else if (isArray(result[i]) && isArray(data[i])) {
+            // array
+            for (var j = 0; j < result[i].length; j++) {
+                autoComplete(result[i][j], data[i][j]);
+            }
         }
     }
 };
