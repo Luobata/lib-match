@@ -3,8 +3,7 @@
         "dev:test": "webpack-dev-server --inline --hot --host 0.0.0.0",
         "build": "node build/build.js",
         "build:esm": "rollup -c build/rollup.config.js",
-        "test":
-            "cross-env NODE_ENV=test mocha --compilers js:babel-core/register test/",
+        "test": "cross-env NODE_ENV=test mocha --compilers js:babel-core/register test/",
         "update": "npm run build && npm publish",
         "lint": "eslint --fix src/"
     },
@@ -17,6 +16,7 @@
         "@std/esm": "^0.19.1"
     },
     "devDependencies": {
+        "randomatic": ">=3.0.0",
         "babel-core": "^6.24.0",
         "babel-eslint": "^8.2.1",
         "babel-loader": "^7.1.1",
