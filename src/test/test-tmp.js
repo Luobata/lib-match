@@ -79,3 +79,21 @@ data = match.parseConfig(
 );
 
 console.log(data);
+
+// 此时应该补全data 但是没有 是个bug
+data = match.parseConfig(
+    params.data.data,
+    {
+        data: [
+            'page_data',
+            {
+                adId: '$${{advertiser_id}}',
+            },
+        ],
+    },
+    {
+        autoComplete: true,
+    },
+);
+
+console.log(data);
