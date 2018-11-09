@@ -1,26 +1,43 @@
-var webpack = require('webpack');
-var webpackMerge = require('webpack-merge')
 var path = require('path');
-var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var webpack = require('webpack');
+var root = path.resolve(__dirname, '../');
+const htmlWebpackPlugin = require('html-webpack-plugin');
 
-var root = path.resolve(__dirname, '../').replace(/\\/g, '/') + '/';
-var assetsRoot = root +　'dist/';
-var assetsSubDirectory = 'static/';
-var productionSourceMap = true;
-var productionGzip = false;
+module.exports = {
+    devtool: 'source-map',
 
-var devWebpackConfig = require('../webpack.config.js');
-
-devWebpackConfig.plugins = [];
-
-var prodWebpackConfig = {
-    devtool: productionSourceMap ? '#source-map' : false,
-    entry : root + '/src/index.js',
+    entry:  [
+        'webpack-hot-middleware/client?quiet=true',
+        root + "/src/test.js",
+    ],
     output: {
-        path: assetsRoot,
-        library: 'match',
-        libraryTarget: 'umd',
+        path: root + "/",
         filename: "match.js"
+    },
+    resolve: {
+        alias: {
+           MATCH: path.resolve(__dirname, '../src/match'),
+           LIB: path.resolve(__dirname, '../src/lib'),
+           TEST: path.resolve(__dirname, '../src/test')
+        }
+    },
+    module: {
+        loaders: [
+        {
+            test: /\.json$/,
+            loader: "json-loader"
+        },
+        {
+            test: /\.js$/,
+            loader: 'babel-loader',
+            exclude: /node_modules/,
+            include: root
+        },
+        {
+            test: /\.css$/,
+            loader: 'style!css'//添加对样式表的处理
+        }
+        ]
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -28,34 +45,19 @@ var prodWebpackConfig = {
                 NODE_ENV: '"production"'
             }
         }),
-        new UglifyJsPlugin({
-            uglifyOptions: {
-                compress: {
-                    warnings: false,
-                },
-            },
-            sourceMap: true,
-            parallel: true,
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new htmlWebpackPlugin({
+            filename: 'test.html',
+            // template: 'test.html',
+            inject: true,
         }),
-    ]
-};
+    ],
 
-if (productionGzip) {
-  var CompressionWebpackPlugin = require('compression-webpack-plugin')
-
-  webpackConfig.plugins.push(
-    new CompressionWebpackPlugin({
-      asset: '[path].gz[query]',
-      algorithm: 'gzip',
-      test: new RegExp(
-        '\\.(' +
-        config.build.productionGzipExtensions.join('|') +
-        ')$'
-      ),
-      threshold: 10240,
-      minRatio: 0.8
-    })
-  )
+    // devServer: {
+    //     contentBase: "./src/",
+    //     port: 9999,
+    //     historyApiFallback: true,
+    //     inline: true
+    // }
 }
-
-module.exports = webpackMerge(devWebpackConfig, prodWebpackConfig);
