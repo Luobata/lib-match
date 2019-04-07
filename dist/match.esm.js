@@ -430,7 +430,8 @@ var splStr = function splStr(str, data) // 映射的params数组
 
 function parseToData (exp, // parse 返回值
 data, // 映射的params数组
-that) // 返回对象指针
+that, // 返回对象指针
+i) // 映射的key
 {
     var result = void 0;
 
@@ -446,7 +447,11 @@ that) // 返回对象指针
         }
 
         if (exp.matchArray) {
-            result = matchArray(data, exp.matchArray);
+            result = matchArray(data, exp.matchArray, i);
+            // 为了解决对象数组hack临时方法 在这里取数组下标0的做法不好，这里不应该关心是不是怎么解析exp.matchArray
+            if (i !== undefined && !has(data, i)) {
+                data[i] = data[exp.matchArray[0]];
+            }
             return result;
         }
 
@@ -599,7 +604,7 @@ var matchObject = function matchObject(data, obj) {
         for (var i in obj) {
             if (!has(obj, i)) continue;
             exp = parse(obj[i], i);
-            result[i] = parseToData(exp, data, result);
+            result[i] = parseToData(exp, data, result, i);
             filter(i, result);
             changeFilterDefaultObject(false);
         }
@@ -611,23 +616,23 @@ var matchObject = function matchObject(data, obj) {
 /**
  * 数组映射
  */
-var matchArray = function matchArray(data, arr) {
+var matchArray = function matchArray(data, keyData) {
     var result = [];
 
     try {
-        if (arr.length === 1) {
+        if (keyData.length === 1) {
             // 直接映射 data
             for (var i = 0; i < data.length; i++) {
-                result[i] = matchObject(data[i], arr[0]);
+                result[i] = matchObject(data[i], keyData[0]);
             }
         }
 
-        if (arr.length === 2) {
+        if (keyData.length === 2) {
             // 映射data的对象
-            data = getData(data, arr[0]);
-            // data = data[arr[0]];
+            data = getData(data, keyData[0]);
+            // data = data[keyData[0]];
             for (var _i = 0; _i < data.length; _i++) {
-                result[_i] = matchObject(data[_i], arr[1]);
+                result[_i] = matchObject(data[_i], keyData[1]);
             }
         }
     } catch (e) {
@@ -640,24 +645,26 @@ var matchArray = function matchArray(data, arr) {
 var match = {
     parse: function parse$$1(combineData, keyData) {
         var result = void 0;
+        // clone combineData for avoiding side effects
+        var data = JSON.parse(JSON.stringify(combineData));
 
         if (isObj(keyData)) {
-            result = matchObject(combineData, keyData);
-            autoComplete(result, combineData);
+            result = matchObject(data, keyData);
+            autoComplete(result, data, keyData);
         }
 
         if (isArray(keyData)) {
-            result = matchArray(combineData, keyData);
+            result = matchArray(data, keyData);
 
             // length 2 的时候autoComplete的对象是选中的key对象
             if (keyData.length === 2) {
-                autoComplete(result, combineData[keyData[0]]);
+                autoComplete(result, data[keyData[0]]);
             } else {
-                autoComplete(result, combineData);
+                autoComplete(result, data);
             }
         }
 
-        debug(result, combineData, keyData);
+        debug(result, data, keyData);
 
         restoreConfig();
 
