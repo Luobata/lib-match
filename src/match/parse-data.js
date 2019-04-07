@@ -1,19 +1,9 @@
 /**
  * @description 把exp解析的内容反装回真是值
  */
-import {
-    getData,
-    getArrData,
-} from 'MATCH/parse';
-import {
-    isEmptyObj,
-    typeCharge,
-    objToArray,
-} from 'LIB/util';
-import {
-    matchObject,
-    matchArray,
-} from 'MATCH/match';
+import { getData, getArrData } from 'MATCH/parse';
+import { isEmptyObj, typeCharge, objToArray, has } from 'LIB/util';
+import { matchObject, matchArray } from 'MATCH/match';
 import stack from 'MATCH/stack';
 import config, { changeFilterDefaultObject } from 'MATCH/config';
 
@@ -51,8 +41,7 @@ const splStr = (
             i++;
             switch (item.spr) {
             case '||':
-                result =
-                        (result === undefined) ? datas(i) : result;
+                result = result === undefined ? datas(i) : result;
                 break;
             case '|||':
                 result = result || datas(i);
@@ -74,6 +63,7 @@ export default function (
     exp: Object, // parse 返回值
     data: Object, // 映射的params数组
     that: Object, // 返回对象指针
+    i: String, // 映射的key
 ) {
     let result;
 
@@ -89,7 +79,11 @@ export default function (
         }
 
         if (exp.matchArray) {
-            result = matchArray(data, exp.matchArray);
+            result = matchArray(data, exp.matchArray, i);
+            // 为了解决对象数组hack临时方法 在这里取数组下标0的做法不好，这里不应该关心是不是怎么解析exp.matchArray
+            if (i !== undefined && !has(data, i)) {
+                data[i] = data[exp.matchArray[0]];
+            }
             return result;
         }
 
@@ -99,7 +93,10 @@ export default function (
         }
 
         if (exp.matchFun) {
-            result = exp.matchFun.apply(that, [data].concat(objToArray(stack, 'value')));
+            result = exp.matchFun.apply(
+                that,
+                [data].concat(objToArray(stack, 'value')),
+            );
             return result;
         }
 
@@ -110,8 +107,7 @@ export default function (
 
         if (exp.matchParam) {
             result = getData(data, exp.matchParam, exp.matchType);
-            result =
-                (result === undefined) ? typeCharge(exp.default) : result;
+            result = result === undefined ? typeCharge(exp.default) : result;
 
             // 记录此时的空对象是默认产生的 防止被filter过滤
             if (isEmptyObj(result)) changeFilterDefaultObject(true);
@@ -120,8 +116,7 @@ export default function (
 
         if (exp.matchArrParam) {
             result = getArrData(data, exp.matchArrParam, exp.matchType);
-            result =
-                (result === undefined) ? typeCharge(exp.default) : result;
+            result = result === undefined ? typeCharge(exp.default) : result;
             return result;
         }
     } catch (e) {
@@ -129,7 +124,9 @@ export default function (
             const def = exp.matchStr.pop();
             if (def.default) {
                 result = typeCharge(def.default);
-                return (config.filterDefaultObject && isEmptyObj(result)) ? undefined : result;
+                return config.filterDefaultObject && isEmptyObj(result)
+                    ? undefined
+                    : result;
             }
         }
         // console.log(e);

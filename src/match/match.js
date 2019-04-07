@@ -30,7 +30,7 @@ export const matchObject = function matchObject(
         for (const i in obj) {
             if (!has(obj, i)) continue;
             exp = parse(obj[i], i);
-            result[i] = parseToData(exp, data, result);
+            result[i] = parseToData(exp, data, result, i);
             filter(i, result);
             changeFilterDefaultObject(false);
         }
@@ -71,24 +71,26 @@ export const matchArray = function matchArray(data: any, keyData: Array) {
 const match = {
     parse: (combineData: Object | Array, keyData: Object | Array) => {
         let result;
+        // clone combineData for avoiding side effects
+        const data = JSON.parse(JSON.stringify(combineData));
 
         if (isObj(keyData)) {
-            result = matchObject(combineData, keyData);
-            autoComplete(result, combineData);
+            result = matchObject(data, keyData);
+            autoComplete(result, data, keyData);
         }
 
         if (isArray(keyData)) {
-            result = matchArray(combineData, keyData);
+            result = matchArray(data, keyData);
 
             // length 2 的时候autoComplete的对象是选中的key对象
             if (keyData.length === 2) {
-                autoComplete(result, combineData[keyData[0]]);
+                autoComplete(result, data[keyData[0]]);
             } else {
-                autoComplete(result, combineData);
+                autoComplete(result, data);
             }
         }
 
-        debug(result, combineData, keyData);
+        debug(result, data, keyData);
 
         restoreConfig();
 
