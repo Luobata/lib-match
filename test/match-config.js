@@ -62,6 +62,65 @@ it('auto complete key with same name', function() {
             province: 2,
         },
     });
+
+    params = {
+        data: {
+            status: 'success',
+            data: {
+                total: 23801,
+                page_data: [
+                    {
+                        advertiser_id: '3526908054',
+                        is_auto_rebate: 3,
+                    },
+                ],
+            },
+        },
+    };
+    data = match.parseConfig(
+        params.data.data,
+        {
+            data: [
+                'page_data',
+                {
+                    adId: '$${{advertiser_id}}',
+                },
+            ],
+            data2: [
+                'page_data',
+                {
+                    adId: '$${{advertiser_id}}',
+                },
+            ],
+        },
+        {
+            autoComplete: true,
+        },
+    );
+
+    assert.deepEqual(data, {
+        data: [
+            {
+                adId: '3526908054',
+                advertiser_id: '3526908054',
+                is_auto_rebate: 3,
+            },
+        ],
+        data2: [
+            {
+                adId: '3526908054',
+                advertiser_id: '3526908054',
+                is_auto_rebate: 3,
+            },
+        ],
+        page_data: [
+            {
+                advertiser_id: '3526908054',
+                is_auto_rebate: 3,
+            },
+        ],
+        total: 23801,
+    });
 });
 it('parseConfig by only current match', function() {
     params = {
